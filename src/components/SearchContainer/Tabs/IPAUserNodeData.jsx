@@ -71,6 +71,36 @@ const IPAUserNodeData = () => {
         serviceprincipalnames: 'Service Principal Names',
         allowedtodelegate: 'Allowed To Delegate',
         sidhistory: 'SID History',
+        
+        cn: "CN",
+        dn: 'DN',
+        gecos: 'GECOS',
+        gidnumber: 'GID Number',
+        givenname: 'Given Name',
+        highvalue: 'High Value',
+        initials: 'Initials',
+        ipauniqueid: 'IPA Unique ID',
+        krbcanonicalname: 'Kerberos Canonical Name',
+        krblastpwdchange: 'Kerberos Last Password Change',
+        krbpasswordexpiration: 'Kerberos Password Expiration',
+        krbprincipalname: 'Kerberos Principal Name',
+        krblastadminunlock: 'Kerberos Last Admin Unlock',
+        krblastfailedauth: 'Kerberos Failed Authentication',
+        krbloginfailedcount: 'Kerberos Login Failed Count',
+        loginshell: 'Login Shell',
+        mail: 'Email',
+        memberof_group: 'Memberof Group',
+        memberof_netgroup: 'Memberof Netgroup',
+        memberof_role: 'Memberof Role',
+        memberof_sudorule: 'Memberof Sudorule',
+        name: 'Name',
+        objectclass: 'Object Class',
+        preserved: 'Preserved',
+        sn: 'Second Name',
+        uid: 'UID',
+        uidnumber: 'UID Number',
+        nsaccountlock: 'NS Account Lock'
+        
     };
 
     return objectId === null ? (

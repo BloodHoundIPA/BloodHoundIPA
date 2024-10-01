@@ -251,6 +251,21 @@ const DatabaseDataDisplay = () => {
 
             <hr></hr>
 
+            <CollapsibleSection header='FreeIPA OBJECTS'>
+                <Table hover striped responsive>
+                    <thead></thead>
+                    <tbody>
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAUser)RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAUser'}
+                        />
+                    </tbody>
+                </Table>
+            </CollapsibleSection>
+
+            <hr></hr>
+
             <div className={clsx('text-center', styles.buttongroup)}>
                 <div role='group' className={styles.buttongroup}>
                     <button

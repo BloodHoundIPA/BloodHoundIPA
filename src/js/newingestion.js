@@ -22,7 +22,6 @@ export const ADLabels = {
     GPO: 'GPO',
     Domain: 'Domain',
     Container: 'Container',
-    IPAUser: 'IPAUser',
     IPAHost: 'IPAHost',
     MemberOf: 'MemberOf',
     AllowedToDelegate: 'AllowedToDelegate',
@@ -178,6 +177,10 @@ const AzurehoundKindLabels = {
     KindAZVMOwner: 'AZVMOwner',
     KindAZVMUserAccessAdmin: 'AZVMUserAccessAdmin',
 };
+
+export const IPALabels = {
+    User: 'IPAUser',
+}
 
 const DirectoryObjectEntityTypes = {
     User: '#microsoft.graph.user',
@@ -1113,7 +1116,7 @@ export function buildIPAComputerJsonNew(chunk) {
 export function buildIPAUserJsonNew(chunk) {
     let queries = {};
     queries.properties = {
-        statement: PROP_QUERY.format(ADLabels.IPAUser),
+        statement: PROP_QUERY.format(IPALabels.User),
         props: [],
     };
 
@@ -1127,7 +1130,7 @@ export function buildIPAUserJsonNew(chunk) {
         //let sidHistory = user.HasSIDHistory;
         let aces = user.Aces;
 
-        processAceArrayNew(aces, ipantsecurityidentifier, ADLabels.IPAUser, queries);
+        processAceArrayNew(aces, ipantsecurityidentifier, IPALabels.User, queries);
 
         queries.properties.props.push({
             objectid: ipantsecurityidentifier,
