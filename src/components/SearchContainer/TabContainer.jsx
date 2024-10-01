@@ -51,7 +51,6 @@ class TabContainer extends Component {
             gpoVisible: false,
             ouVisible: false,
             containerVisible: false,
-            IPAuserVisible: false,
             IPAcomputerVisible: false,
             azGroupVisible: false,
             azUserVisible: false,
@@ -71,6 +70,7 @@ class TabContainer extends Component {
             azAppVisible: false,
             azManagementGroupVisible: false,
             azRoleVisible: false,
+            ipaUserVisible: false,
             selected: 1,
         };
     }
@@ -99,8 +99,6 @@ class TabContainer extends Component {
         } else if (type === 'GPO') {
             this._gpoNodeClicked();
         } else if (type === 'IPAComputer') {
-            this._computerNodeClicked();
-        } else if (type === 'IPAUser') {
             this._computerNodeClicked();
         } else if (type === 'AZGroup') {
             this._azGroupNodeClicked();
@@ -144,7 +142,9 @@ class TabContainer extends Component {
             this._azManagementGroupNodeClicked()
         } else if (type === 'AZRole') {
             this._azRoleNodeClicked()
-        }
+        } else if (type === 'IPAUser') {
+            this._ipaUserNodeClicked();
+        } 
     }
 
     componentDidMount() {
@@ -234,10 +234,10 @@ class TabContainer extends Component {
     }
 
 
-    _IPAuserNodeClicked() {
+    _ipaUserNodeClicked() {
         this.clearVisible()
         this.setState({
-            userVisible: true,
+            ipaUserVisible: true,
             selected: 2
         });
     }
@@ -430,7 +430,6 @@ class TabContainer extends Component {
                                 !this.state.domainVisible &&
                                 !this.state.gpoVisible &&
                                 !this.state.ouVisible &&
-                                !this.state.IPAuserVisible &&
                                 !this.state.IPAcomputerVisible &&
                                 !this.state.azGroupVisible &&
                                 !this.state.azUserVisible &&
@@ -451,7 +450,8 @@ class TabContainer extends Component {
                                 !this.state.azAppVisible &&
                                 !this.state.baseVisible &&
                                 !this.state.azManagementGroupVisible &&
-                                !this.state.azRoleVisible
+                                !this.state.azRoleVisible &&
+                                !this.state.ipaUserVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -465,7 +465,6 @@ class TabContainer extends Component {
                         <OuNodeData visible={this.state.ouVisible} />
                         <ContainerNodeData visible={this.state.containerVisible} />
                         <IPAComputerNodeData visible={this.state.IPAcomputerVisible} />
-                        <IPAUserNodeData visible={this.state.IPAuserVisible} />
                         <AZGroupNodeData visible={this.state.azGroupVisible} />
                         <AZUserNodeData visible={this.state.azUserVisible} />
                         <AZContainerRegistryNodeData visible={this.state.azContainerRegistryVisible} />
@@ -497,6 +496,7 @@ class TabContainer extends Component {
                         <AZAppNodeData visible={this.state.azAppVisible} />
                         <AZManagementGroupNodeData visible={this.state.azManagementGroupVisible} />
                         <AZRoleNodeData visible={this.state.azRoleVisible} />
+                        <IPAUserNodeData visible={this.state.ipaUserVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>
