@@ -256,9 +256,14 @@ const DatabaseDataDisplay = () => {
                     <thead></thead>
                     <tbody>
                         <DatabaseDataLabel
-                            query={'MATCH (n:IPAUser)RETURN count(n) AS count'}
+                            query={'MATCH (n:IPAUser) RETURN count(n) AS count'}
                             index={index}
                             label={'IPAUser'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAHost) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAHost'}
                         />
                     </tbody>
                 </Table>
