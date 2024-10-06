@@ -180,7 +180,8 @@ const AzurehoundKindLabels = {
 
 export const IPALabels = {
     User: 'IPAUser',
-}
+    HostGroup: 'IPAHostGroup',
+};
 
 const DirectoryObjectEntityTypes = {
     User: '#microsoft.graph.user',
@@ -979,6 +980,46 @@ export function buildIPAUserJsonNew(chunk) {
             map: properties,
         });
         
+    }
+    return queries;
+}
+
+/**
+ *
+ * @param {Array.<IPAHostGroup>} chunk
+ * @returns {{}}
+ */
+export function buildIPAHostGroupJsonNew(chunk) {
+    let queries = {};
+    queries.properties = {};
+    queries.properties.statement = PROP_QUERY.format(IPALabels.HostGroup);
+    queries.properties.props = [];
+
+    for (let group of chunk) {
+        let properties = group.Properties;
+        let identifier = group.ipauniqueid;
+        let aces = group.Aces;
+        let members = group.Members;
+
+        queries.properties.props.push({
+            objectid: identifier,
+            map: properties,
+        });
+
+        processAceArrayNew(aces, identifier, IPALabels.HostGroup, queries);
+
+        let format = ['', IPALabels.HostGroup, ADLabels.MemberOf, NON_ACL_PROPS];
+
+        let grouped = groupBy(members, 'type');
+
+        for (let objectType in grouped) {
+            format[0] = objectType;
+            let props = grouped[objectType].map((member) => {
+                return { source: member.ipauniqueid, target: identifier };
+            });
+
+            insertNew(queries, format, props);
+        }
     }
     return queries;
 }

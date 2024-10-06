@@ -27,7 +27,8 @@ const labels = [
     'AZManagedCluster',
     'AZVMScaleSet',
     'IPAUser',
-    'IPAHost'
+    'IPAHost',
+    'IPAHostGroup'
 ];
 
 export function generateUniqueId(sigmaInstance, isNode) {
@@ -220,7 +221,7 @@ async function dropIndexes() {
 
 export async function setSchema() {
     const luceneIndexProvider = "lucene+native-3.0"
-    let labels = ["User", "Group", "Computer", "GPO", "OU", "Domain", "Container", "Base", "AZBase", "AZApp", "AZDevice", "AZGroup", "AZKeyVault", "AZResourceGroup", "AZServicePrincipal", "AZTenant", "AZUser", "AZVM", "AZFunctionApp", "AZLogicApp", "AZAutomationAccount", "AZContainerRegistry", "AZWebApp", "AZManagedCluster", "AZVMScaleSet", "IPAUser", "IPAHost"]
+    let labels = ["User", "Group", "Computer", "GPO", "OU", "Domain", "Container", "Base", "AZBase", "AZApp", "AZDevice", "AZGroup", "AZKeyVault", "AZResourceGroup", "AZServicePrincipal", "AZTenant", "AZUser", "AZVM", "AZFunctionApp", "AZLogicApp", "AZAutomationAccount", "AZContainerRegistry", "AZWebApp", "AZManagedCluster", "AZVMScaleSet", "IPAUser", "IPAHost", "IPAHostGroup"]
     let azLabels = ["AZBase", "AZApp", "AZDevice", "AZGroup", "AZKeyVault", "AZResourceGroup", "AZServicePrincipal", "AZTenant", "AZUser", "AZVM", "AZFunctionApp", "AZLogicApp", "AZAutomationAccount", "AZContainerRegistry", "AZWebApp", "AZManagedCluster", "AZVMScaleSet"]
     let schema = {}
     for (let label of labels){

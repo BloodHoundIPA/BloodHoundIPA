@@ -10,6 +10,7 @@ import GpoNodeData from './Tabs/GPONodeData';
 import OuNodeData from './Tabs/OUNodeData';
 import IPAUserNodeData from './Tabs/IPAUserNodeData';
 import IPAHostNodeData from './Tabs/IPAHostNodeData';
+import IPAHostGroupNodeData from './Tabs/IPAHostGroupNodeData';
 import AZGroupNodeData from './Tabs/AZGroupNodeData';
 import AZUserNodeData from './Tabs/AZUserNodeData';
 import AZContainerRegistryNodeData from './Tabs/AZContainerRegistryNodeData';
@@ -71,6 +72,7 @@ class TabContainer extends Component {
             azManagementGroupVisible: false,
             azRoleVisible: false,
             ipaUserVisible: false,
+            ipaHostGroupVisible: false,
             selected: 1,
         };
     }
@@ -144,6 +146,8 @@ class TabContainer extends Component {
             this._azRoleNodeClicked()
         } else if (type === 'IPAUser') {
             this._ipaUserNodeClicked();
+        } else if (type === 'IPAHostGroup') {
+            this._ipaHostGroupNodeClicked();
         } 
     }
 
@@ -246,6 +250,14 @@ class TabContainer extends Component {
         this.clearVisible()
         this.setState({
             IPAhostVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaHostGroupNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaHostGroupVisible: true,
             selected: 2
         });
     }
@@ -451,7 +463,8 @@ class TabContainer extends Component {
                                 !this.state.baseVisible &&
                                 !this.state.azManagementGroupVisible &&
                                 !this.state.azRoleVisible &&
-                                !this.state.ipaUserVisible
+                                !this.state.ipaUserVisible &&
+                                !this.state.ipaHostGroupVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -497,6 +510,7 @@ class TabContainer extends Component {
                         <AZManagementGroupNodeData visible={this.state.azManagementGroupVisible} />
                         <AZRoleNodeData visible={this.state.azRoleVisible} />
                         <IPAUserNodeData visible={this.state.ipaUserVisible} />
+                        <IPAHostGroupNodeData visible={this.state.ipaHostGroupVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>
