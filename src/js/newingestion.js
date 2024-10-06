@@ -8,6 +8,8 @@ const PROP_QUERY =
     'UNWIND $props AS prop MERGE (n:Base {objectid:prop.objectid}) SET n:{} SET n += prop.map';
 const AZURE_PROP_QUERY =
     'UNWIND $props AS prop MERGE (n:AZBase {objectid:prop.objectid}) SET n:{} SET n += prop.map';
+const FREEIPA_PROP_QUERY =
+    'UNWIND $props AS prop MERGE (n:IPABase {objectid:prop.objectid}) SET n:{} SET n += prop.map';
 const NON_ACL_PROPS = '{isacl:false}';
 
 const GROUP_OBJECT_TYPE = 'ObjectType';
@@ -179,8 +181,11 @@ const AzurehoundKindLabels = {
 };
 
 export const IPALabels = {
+    Base: 'IPABase',
     User: 'IPAUser',
-}
+    HostGroup: 'IPAHostGroup',
+    MemberOf: 'IPAMemberOf',
+};
 
 const DirectoryObjectEntityTypes = {
     User: '#microsoft.graph.user',
@@ -919,7 +924,7 @@ export function buildDomainJsonNew(chunk) {
 export function buildIPAHostJsonNew(chunk) {
     let queries = {};
     queries.properties = {};
-    queries.properties.statement = PROP_QUERY.format(ADLabels.IPAHost);
+    queries.properties.statement = FREEIPA_PROP_QUERY.format(ADLabels.IPAHost);
     queries.properties.props = [];
 
     for (let computer of chunk) {
@@ -958,7 +963,7 @@ export function buildIPAHostJsonNew(chunk) {
 export function buildIPAUserJsonNew(chunk) {
     let queries = {};
     queries.properties = {
-        statement: PROP_QUERY.format(IPALabels.User),
+        statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
         props: [],
     };
 
@@ -983,11 +988,54 @@ export function buildIPAUserJsonNew(chunk) {
     return queries;
 }
 
+/**
+ *
+ * @param {Array.<IPAHostGroup>} chunk
+ * @returns {{}}
+ */
+export function buildIPAHostGroupJsonNew(chunk) {
+    let queries = {};
+    queries.properties = {};
+    queries.properties.statement = FREEIPA_PROP_QUERY.format(IPALabels.HostGroup);
+    queries.properties.props = [];
+
+    for (let group of chunk) {
+        let properties = group.Properties;
+        let identifier = group.ipauniqueid;
+        let aces = group.Aces;
+        let members = group.Members;
+
+        queries.properties.props.push({
+            objectid: identifier,
+            map: properties,
+        });
+
+        processAceArrayNew(aces, identifier, IPALabels.HostGroup, queries);
+
+        let format = ['', IPALabels.HostGroup, IPALabels.MemberOf, NON_ACL_PROPS];
+
+        let grouped = groupBy(members, 'type');
+
+        for (let objectType in grouped) {
+            format[0] = objectType;
+            let props = grouped[objectType].map((member) => {
+                return { source: member.ipauniqueid, target: identifier };
+            });
+
+            insertNewIPA(queries, format, props);
+        }
+    }
+    return queries;
+}
+
 const baseInsertStatement =
     'UNWIND $props AS prop MERGE (n:Base {objectid: prop.source}) SET n:{0} MERGE (m:Base {objectid: prop.target}) SET m:{1} MERGE (n)-[r:{2} {3}]->(m)';
 
 const azureInsertStatement =
     'UNWIND $props AS prop MERGE (n:AZBase {objectid: prop.source}) SET n:{0} MERGE (m:AZBase {objectid: prop.target}) SET m:{1} MERGE (n)-[r:{2} {3}]->(m)';
+
+const ipaInsertStatement =
+    'UNWIND $props AS prop MERGE (n:IPABase {objectid: prop.source}) SET n:{0} MERGE (m:IPABase {objectid: prop.target}) SET m:{1} MERGE (n)-[r:{2} {3}]->(m)';
 
 /**
  * Inserts a query into the queries table
@@ -1018,6 +1066,32 @@ function insertNew(queries, formatProps, queryProps) {
     } else {
         queries[hash] = {};
         queries[hash].statement = baseInsertStatement.formatn(...formatProps);
+        queries[hash].props = [].concat(queryProps);
+    }
+}
+
+function insertNewIPA(queries, formatProps, queryProps) {
+    if (formatProps.length < 4) {
+        throw new NotEnoughArgumentsException();
+    }
+    if (queryProps.length === 0) {
+        return;
+    }
+
+    if (formatProps[0] === 'Unknown') {
+        formatProps[0] = 'IPABase';
+    }
+
+    if (formatProps[1] === 'Unknown') {
+        formatProps[1] = 'IPABase';
+    }
+
+    let hash = `${formatProps[0]}-${formatProps[1]}-${formatProps[2]}`;
+    if (queries[hash]) {
+        queries[hash].props = queries[hash].props.concat(queryProps);
+    } else {
+        queries[hash] = {};
+        queries[hash].statement = ipaInsertStatement.formatn(...formatProps);
         queries[hash].props = [].concat(queryProps);
     }
 }

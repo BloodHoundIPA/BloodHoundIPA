@@ -78,6 +78,7 @@ import AZAKSContributor from './HelpTexts/AZAKSContributor/AZAKSContributor';
 import AZKeyVaultKVContributor from './HelpTexts/AZKeyVaultKVContributor/AZKeyVaultKVContributor';
 import AZLogicAppContributor from './HelpTexts/AZLogicAppContributor/AZLogicAppContributor';
 import AZNodeResourceGroup from './HelpTexts/AZNodeResourceGroup/AZNodeResourceGroup';
+import IPAMemberOf from './HelpTexts/IPAMemberOf/IPAMemberOf'; 
 
 const HelpModal = () => {
     const [sourceName, setSourceName] = useState('');
@@ -191,6 +192,7 @@ const HelpModal = () => {
         AZKeyVaultKVContributor: AZKeyVaultKVContributor,
         AZLogicAppContributor: AZLogicAppContributor,
         AZNodeResourceGroup: AZNodeResourceGroup,
+        IPAMemberOf: IPAMemberOf,
     };
 
     const Component = edge in components ? components[edge] : Default;
