@@ -183,7 +183,7 @@ const AzurehoundKindLabels = {
 export const IPALabels = {
     Base: 'IPABase',
     User: 'IPAUser',
-    HostGroup: 'IPAHostGroup',
+    Group: 'IPAGroup',
     MemberOf: 'IPAMemberOf',
 };
 
@@ -990,36 +990,36 @@ export function buildIPAUserJsonNew(chunk) {
 
 /**
  *
- * @param {Array.<IPAHostGroup>} chunk
+ * @param {Array.<IPAGroup>} chunk
  * @returns {{}}
  */
-export function buildIPAHostGroupJsonNew(chunk) {
+export function buildIPAGroupJsonNew(chunk) {
     let queries = {};
     queries.properties = {};
-    queries.properties.statement = FREEIPA_PROP_QUERY.format(IPALabels.HostGroup);
+    queries.properties.statement = FREEIPA_PROP_QUERY.format(IPALabels.Group);
     queries.properties.props = [];
 
     for (let group of chunk) {
         let properties = group.Properties;
-        let identifier = group.ipauniqueid;
+        let ipauniqueid = group.ipauniqueid;
         let aces = group.Aces;
         let members = group.Members;
 
         queries.properties.props.push({
-            objectid: identifier,
+            objectid: ipauniqueid,
             map: properties,
         });
 
-        processAceArrayNew(aces, identifier, IPALabels.HostGroup, queries);
+        processAceArrayNew(aces, ipauniqueid, IPALabels.Group, queries);
 
-        let format = ['', IPALabels.HostGroup, IPALabels.MemberOf, NON_ACL_PROPS];
+        let format = ['', IPALabels.Group, IPALabels.MemberOf, NON_ACL_PROPS];
 
         let grouped = groupBy(members, 'type');
 
         for (let objectType in grouped) {
             format[0] = objectType;
             let props = grouped[objectType].map((member) => {
-                return { source: member.ipauniqueid, target: identifier };
+                return { source: member.ipauniqueid, target: ipauniqueid };
             });
 
             insertNewIPA(queries, format, props);

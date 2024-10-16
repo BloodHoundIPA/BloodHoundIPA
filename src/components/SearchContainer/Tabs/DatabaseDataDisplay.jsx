@@ -266,9 +266,9 @@ const DatabaseDataDisplay = () => {
                             label={'IPAHost'}
                         />
                         <DatabaseDataLabel
-                            query={'MATCH (n:IPAHostGroup) RETURN count(n) AS count'}
+                            query={'MATCH (n:IPAGroup) RETURN count(n) AS count'}
                             index={index}
-                            label={'IPAHostGroup'}
+                            label={'IPAGroup'}
                         />
                     </tbody>
                 </Table>
