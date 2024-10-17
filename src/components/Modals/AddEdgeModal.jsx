@@ -83,7 +83,7 @@ const AddEdgeModal = () => {
             let node = record.get(0);
             let properties = node.properties;
             let fType = node.labels.filter(
-                (w) => w !== 'Base' && w !== 'AZBase'
+                (w) => w !== 'Base' && w !== 'AZBase' && w !== 'IPABase'
             );
             properties.type = fType.length > 0 ? fType[0] : 'Base';
             data.push(properties);

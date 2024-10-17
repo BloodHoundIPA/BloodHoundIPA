@@ -89,7 +89,7 @@ const SearchContainer = () => {
                     properties.type = labels[0];
                 } else {
                     properties.type = labels.filter((x) => {
-                        return x !== 'Base' && x !== 'AZBase';
+                        return x !== 'Base' && x !== 'AZBase' && x !== 'IPABase';
                     })[0];
                 }
 

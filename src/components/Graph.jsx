@@ -934,7 +934,7 @@ class GraphContainer extends Component {
             return null;
         }
         let id = data.identity;
-        let fType = data.labels.filter((w) => w !== 'Base' && w !== 'AZBase');
+        let fType = data.labels.filter((w) => w !== 'Base' && w !== 'AZBase' && w !== 'IPABase');
         let type = fType.length > 0 ? fType[0] : 'Base';
         let label = this.selectLabel(data.properties);
 
