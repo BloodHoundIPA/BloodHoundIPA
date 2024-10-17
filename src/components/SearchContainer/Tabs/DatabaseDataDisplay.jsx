@@ -265,6 +265,11 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'IPAHost'}
                         />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAHostGroup) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAHostGroup'}
+                        />
                     </tbody>
                 </Table>
             </CollapsibleSection>
