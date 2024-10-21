@@ -41,6 +41,7 @@ const IngestFuncMap = {
     IPAusers: NewIngestion.buildIPAUserJsonNew,
     IPAgroups: NewIngestion.buildIPAGroupJsonNew,
     azure: NewIngestion.convertAzureData,
+    freeipa: NewIngestion.convertFreeIPAData,
 };
 
 const MenuContainer = () => {
@@ -310,7 +311,26 @@ const MenuContainer = () => {
                             await uploadData(statement, chunk);
                         }
                     }
+                }
+                if (file.type === 'freeipa') {
+                    console.log(processedData);
+                    for (let index in processedData) {
+                        // console.log(pData);
+                        let pData = processedData[index];
+                        for (let key in pData) {
+                            console.log(key);
+                            let props = pData[key].props;
+                            if (props.length === 0) continue;
+                            let chunked = props.chunk();
+                            let statement = pData[key].statement;
+    
+                            for (let chunk of chunked) {
+                                await uploadData(statement, chunk);
+                            }
+                        }
+                    }
                 } else {
+                    console.log(processedData);
                     for (let key in processedData) {
                         let props = processedData[key].props;
                         if (props.length === 0) continue;
