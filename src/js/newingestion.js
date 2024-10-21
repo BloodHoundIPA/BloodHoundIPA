@@ -957,19 +957,44 @@ export function buildIPAHostJsonNew(chunk) {
 
 /**
  *
- * @param {Array.<IPAUser>}chunk
+ * @param {Array.<IPABase>} chunk
  * @return {{}}
  */
-export function buildIPAUserJsonNew(chunk) {
+export function convertFreeIPAData(chunk) {
+    let queries = [];
+    let ipa_handler = new Map();
+
+    ipa_handler.set('person', buildIPAUserJsonNew);
+
+    for (let object of chunk) {
+        // return ipa_handler.get('person')([object]);
+        for (let object_class of object.Properties.objectclass) {
+            if (ipa_handler.has(object_class)) {
+                queries.push(ipa_handler.get(object_class)(object));
+                // return ipa_handler.get(object_class)([object]);
+                break;
+            }
+        }
+    }
+    return queries;
+}
+
+/**
+ *
+ * @param {IPAUser} user
+ * @return {{}}
+ */
+export function buildIPAUserJsonNew(user) {
     let queries = {};
     queries.properties = {
         statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
         props: [],
     };
 
-    for (let user of chunk) {
+    // for (let user of chunk) {
+        console.log(user);
         let properties = user.Properties;
-        let ipauniqueid = user.ipauniqueid;
+        let ipauniqueid = user.Properties.ipauniqueid;
         //let identifier = user.ObjectIdentifier;
         //let primaryGroup = user.PrimaryGroupSID;
         //let allowedToDelegate = user.AllowedToDelegate;
@@ -984,7 +1009,7 @@ export function buildIPAUserJsonNew(chunk) {
             map: properties,
         });
         
-    }
+    // }
     return queries;
 }
 
