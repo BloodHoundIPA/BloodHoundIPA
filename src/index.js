@@ -166,7 +166,19 @@ global.appStore = {
                 scale: 1.2,
                 color: '#171AE6',
             },
-            IPAGroup: {
+            IPAUserGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF0C0',
+                scale: 1.5,
+                color: '#DBE617',
+            },
+            IPAHostGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF0C0',
+                scale: 1.5,
+                color: '#DBE617',
+            },
+            IPANetGroup: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uF0C0',
                 scale: 1.5,

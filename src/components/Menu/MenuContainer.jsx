@@ -37,9 +37,6 @@ const IngestFuncMap = {
     ous: NewIngestion.buildOuJsonNew,
     gpos: NewIngestion.buildGpoJsonNew,
     containers: NewIngestion.buildContainerJsonNew,
-    IPAhosts: NewIngestion.buildIPAHostJsonNew,
-    IPAusers: NewIngestion.buildIPAUserJsonNew,
-    IPAgroups: NewIngestion.buildIPAGroupJsonNew,
     azure: NewIngestion.convertAzureData,
     freeipa: NewIngestion.convertFreeIPAData,
 };
@@ -311,7 +308,7 @@ const MenuContainer = () => {
                             await uploadData(statement, chunk);
                         }
                     }
-                }
+/*                }
                 if (file.type === 'freeipa') {
                     console.log(processedData);
                     for (let index in processedData) {
@@ -328,7 +325,7 @@ const MenuContainer = () => {
                                 await uploadData(statement, chunk);
                             }
                         }
-                    }
+                    }*/
                 } else {
                     console.log(processedData);
                     for (let key in processedData) {

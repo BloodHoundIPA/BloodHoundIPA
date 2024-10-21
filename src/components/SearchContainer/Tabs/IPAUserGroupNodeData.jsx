@@ -9,7 +9,7 @@ import NodeCypherLink from './Components/NodeCypherLink';
 import NodePlayCypherLink from './Components/NodePlayCypherLink';
 import styles from './NodeData.module.css';
 
-const IPAGroupNodeData = () => {
+const IPAUserGroupNodeData = () => {
     const [visible, setVisible] = useState(false);
     const [objectid, setObjectid] = useState(null);
     const [label, setLabel] = useState(null);
@@ -26,13 +26,13 @@ const IPAGroupNodeData = () => {
     }, []);
 
     const nodeClickEvent = (type, id, blocksinheritance, domain) => {
-        if (type === 'IPAGroup') {
+        if (type === 'IPAUserGroup') {
             setVisible(true);
             setObjectid(id);
             setDomain(domain);
             let session = driver.session();
             session
-                .run(`MATCH (n:IPAGroup {objectid: $objectid}) RETURN n AS node`, {
+                .run(`MATCH (n:IPAUserGroup {objectid: $objectid}) RETURN n AS node`, {
                     objectid: id,
                 })
                 .then((r) => {
@@ -118,7 +118,7 @@ const IPAGroupNodeData = () => {
                                     property='Direct Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[b:IPAMemberOf]->(c:IPAGroup {objectid: $objectid})'
+                                        'MATCH p=(n)-[b:IPAMemberOf]->(c:IPAUserGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
@@ -126,7 +126,7 @@ const IPAGroupNodeData = () => {
                                     property='Unrolled Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf*1..]->(g:IPAGroup {objectid: $objectid})'
+                                        'MATCH p =(n)-[r:IPAMemberOf*1..]->(g:IPAUserGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                     distinct
@@ -135,7 +135,7 @@ const IPAGroupNodeData = () => {
                                     property='Foreign Members'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g:IPAGroup {objectid: $objectid}) WHERE NOT g.domain = n.domain'
+                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g:IPAUserGroup {objectid: $objectid}) WHERE NOT g.domain = n.domain'
                                     }
                                     end={label}
                                     distinct
@@ -156,7 +156,7 @@ const IPAGroupNodeData = () => {
                                     property='First Degree Group Membership'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(g1:IPAGroup {objectid: $objectid})-[r:IPAMemberOf]->(n:IPAGroup)'
+                                        'MATCH p=(g1:IPAUserGroup {objectid: $objectid})-[r:IPAMemberOf]->(n:IPAUserGroup)'
                                     }
                                     start={label}
                                     distinct
@@ -165,7 +165,7 @@ const IPAGroupNodeData = () => {
                                     property='Unrolled Member Of'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g1:IPAGroup {objectid: $objectid})-[r:IPAMemberOf*1..]->(n:IPAGroup)'
+                                        'MATCH p = (g1:IPAUserGroup {objectid: $objectid})-[r:IPAMemberOf*1..]->(n:IPAUserGroup)'
                                     }
                                     start={label}
                                     distinct
@@ -174,7 +174,7 @@ const IPAGroupNodeData = () => {
                                     property='Foreign Group Membership'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:IPAGroup {objectid: $objectid}) MATCH (n:IPAGroup) WHERE NOT m.domain=n.domain MATCH p=(m)-[r:IPAMemberOf*1..]->(n)'
+                                        'MATCH (m:IPAUserGroup {objectid: $objectid}) MATCH (n:IPAUserGroup) WHERE NOT m.domain=n.domain MATCH p=(m)-[r:IPAMemberOf*1..]->(n)'
                                     }
                                     start={label}
                                 />
@@ -194,7 +194,7 @@ const IPAGroupNodeData = () => {
                                     property='First Degree Local Admin'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(m:IPAGroup {objectid: $objectid})-[r:AdminTo]->(n:Computer)'
+                                        'MATCH p=(m:IPAUserGroup {objectid: $objectid})-[r:AdminTo]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -204,7 +204,7 @@ const IPAGroupNodeData = () => {
                                     property='Group Delegated Local Admin Rights'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g1:IPAGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAGroup)-[r2:AdminTo]->(n:Computer)'
+                                        'MATCH p = (g1:IPAUserGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAUserGroup)-[r2:AdminTo]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -214,7 +214,7 @@ const IPAGroupNodeData = () => {
                                     property='Derivative Local Admin Rights'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = shortestPath((g:IPAGroup {objectid: $objectid})-[r:IPAMemberOf|AdminTo|HasSession*1..]->(n:Computer))'
+                                        'MATCH p = shortestPath((g:IPAUserGroup {objectid: $objectid})-[r:IPAMemberOf|AdminTo|HasSession*1..]->(n:Computer))'
                                     }
                                     start={label}
                                     distinct
@@ -235,7 +235,7 @@ const IPAGroupNodeData = () => {
                                     property='First Degree RDP Privileges'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(m:IPAGroup {objectid: $objectid})-[r:CanRDP]->(n:Computer)'
+                                        'MATCH p=(m:IPAUserGroup {objectid: $objectid})-[r:CanRDP]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -244,7 +244,7 @@ const IPAGroupNodeData = () => {
                                     property='Group Delegated RDP Privileges'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(m:IPAGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAGroup)-[r2:CanRDP]->(n:Computer)'
+                                        'MATCH p=(m:IPAUserGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAUserGroup)-[r2:CanRDP]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -253,7 +253,7 @@ const IPAGroupNodeData = () => {
                                     property='First Degree DCOM Privileges'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(m:IPAGroup {objectid: $objectid})-[r:ExecuteDCOM]->(n:Computer)'
+                                        'MATCH p=(m:IPAUserGroup {objectid: $objectid})-[r:ExecuteDCOM]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -262,7 +262,7 @@ const IPAGroupNodeData = () => {
                                     property='Group Delegated DCOM Privileges'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(m:IPAGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAGroup)-[r2:ExecuteDCOM]->(n:Computer)'
+                                        'MATCH p=(m:IPAUserGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAUserGroup)-[r2:ExecuteDCOM]->(n:Computer)'
                                     }
                                     start={label}
                                     distinct
@@ -283,7 +283,7 @@ const IPAGroupNodeData = () => {
                                     property='First Degree Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g:IPAGroup {objectid: $objectid})-[r]->(n) WHERE r.isacl=true'
+                                        'MATCH p = (g:IPAUserGroup {objectid: $objectid})-[r]->(n) WHERE r.isacl=true'
                                     }
                                     start={label}
                                     distinct
@@ -292,7 +292,7 @@ const IPAGroupNodeData = () => {
                                     property='Group Delegated Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (g1:IPAGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAGroup)-[r2]->(n) WHERE r2.isacl=true'
+                                        'MATCH p = (g1:IPAUserGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAUserGroup)-[r2]->(n) WHERE r2.isacl=true'
                                     }
                                     start={label}
                                     distinct
@@ -301,7 +301,7 @@ const IPAGroupNodeData = () => {
                                     property='Transitive Object Control'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((g:IPAGroup {objectid: $objectid})-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(n))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((g:IPAUserGroup {objectid: $objectid})-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(n))'
                                     }
                                     start={label}
                                     distinct
@@ -322,7 +322,7 @@ const IPAGroupNodeData = () => {
                                     property='Explicit Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:AddMember|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(g:IPAGroup {objectid: $objectid})'
+                                        'MATCH p = (n)-[r:AddMember|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(g:IPAUserGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                     distinct
@@ -331,7 +331,7 @@ const IPAGroupNodeData = () => {
                                     property='Unrolled Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g1:IPAGroup)-[r1]->(g2:IPAGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid AND r1.isacl=true'
+                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r1]->(g2:IPAUserGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid AND r1.isacl=true'
                                     }
                                     end={label}
                                     distinct
@@ -340,7 +340,7 @@ const IPAGroupNodeData = () => {
                                     property='Transitive Object Controllers'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((n)-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(g:IPAGroup {objectid: $objectid}))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((n)-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(g:IPAUserGroup {objectid: $objectid}))'
                                     }
                                     end={label}
                                     distinct
@@ -361,5 +361,5 @@ const IPAGroupNodeData = () => {
     );
 };
 
-IPAGroupNodeData.propTypes = {};
-export default IPAGroupNodeData;
+IPAUserGroupNodeData.propTypes = {};
+export default IPAUserGroupNodeData;
