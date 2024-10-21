@@ -52,7 +52,13 @@ const SearchRow = ({ item, search }) => {
         case 'IPAHost':
             icon.className = 'fa fa-desktop';
             break;
-        case 'IPAGroup':
+        case 'IPAUserGroup':
+            icon.className = 'fa fa-users';
+            break;
+        case 'IPAHostGroup':
+            icon.className = 'fa fa-users';
+            break;
+        case 'IPANetGroup':
             icon.className = 'fa fa-users';
             break;
         case 'AZUser':

@@ -8,9 +8,6 @@ import ComputerNodeData from './Tabs/ComputerNodeData';
 import DomainNodeData from './Tabs/DomainNodeData';
 import GpoNodeData from './Tabs/GPONodeData';
 import OuNodeData from './Tabs/OUNodeData';
-import IPAUserNodeData from './Tabs/IPAUserNodeData';
-import IPAHostNodeData from './Tabs/IPAHostNodeData';
-import IPAGroupNodeData from './Tabs/IPAGroupNodeData';
 import AZGroupNodeData from './Tabs/AZGroupNodeData';
 import AZUserNodeData from './Tabs/AZUserNodeData';
 import AZContainerRegistryNodeData from './Tabs/AZContainerRegistryNodeData';
@@ -37,6 +34,12 @@ import BaseNodeData from "./Tabs/BaseNodeData";
 import ContainerNodeData from "./Tabs/ContainerNodeData";
 import AZManagementGroupNodeData from "./Tabs/AZManagementGroupNodeData";
 import AZRoleNodeData from "./Tabs/AZRoleNodeData";
+import IPAUserNodeData from './Tabs/IPAUserNodeData';
+import IPAHostNodeData from './Tabs/IPAHostNodeData';
+import IPAUserGroupNodeData from './Tabs/IPAUserGroupNodeData';
+import IPAHostGroupNodeData from './Tabs/IPAHostGroupNodeData';
+import IPANetGroupNodeData from './Tabs/IPANetGroupNodeData';
+
 
 class TabContainer extends Component {
 
@@ -72,7 +75,9 @@ class TabContainer extends Component {
             azManagementGroupVisible: false,
             azRoleVisible: false,
             ipaUserVisible: false,
-            ipaGroupVisible: false,
+            ipaUserGroupVisible: false,
+            ipaHostGroupVisible: false,
+            ipaNetGroupVisible: false,
             selected: 1,
         };
     }
@@ -146,9 +151,13 @@ class TabContainer extends Component {
             this._azRoleNodeClicked()
         } else if (type === 'IPAUser') {
             this._ipaUserNodeClicked();
-        } else if (type === 'IPAGroup') {
-            this._ipaGroupNodeClicked();
-        } 
+        } else if (type === 'IPAUserGroup') {
+            this._ipaUserGroupNodeClicked();
+        } else if (type === 'IPAHostGroup') {
+            this._ipaHostGroupNodeClicked();
+        } else if (type === 'IPANetGroup') {
+            this._ipaNetGroupNodeClicked();
+        }
     }
 
     componentDidMount() {
@@ -254,10 +263,26 @@ class TabContainer extends Component {
         });
     }
 
-    _ipaGroupNodeClicked() {
+    _ipaUserGroupNodeClicked() {
         this.clearVisible()
         this.setState({
-            ipaGroupVisible: true,
+            ipaUserGroupVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaHostGroupNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaHostGroupVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaNetGroupNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaNetGroupVisible: true,
             selected: 2
         });
     }
@@ -464,7 +489,9 @@ class TabContainer extends Component {
                                 !this.state.azManagementGroupVisible &&
                                 !this.state.azRoleVisible &&
                                 !this.state.ipaUserVisible &&
-                                !this.state.ipaGroupVisible
+                                !this.state.ipaUserGroupVisible &&
+                                !this.state.ipaHostGroupVisible &&
+                                !this.state.ipaNetGroupVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -510,7 +537,9 @@ class TabContainer extends Component {
                         <AZManagementGroupNodeData visible={this.state.azManagementGroupVisible} />
                         <AZRoleNodeData visible={this.state.azRoleVisible} />
                         <IPAUserNodeData visible={this.state.ipaUserVisible} />
-                        <IPAGroupNodeData visible={this.state.ipaGroupVisible} />
+                        <IPAUserGroupNodeData visible={this.state.ipaUserGroupVisible} />
+                        <IPAHostGroupNodeData visible={this.state.ipaHostGroupVisible} />
+                        <IPANetGroupNodeData visible={this.state.ipaNetGroupVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>

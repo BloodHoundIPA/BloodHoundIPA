@@ -24,7 +24,6 @@ export const ADLabels = {
     GPO: 'GPO',
     Domain: 'Domain',
     Container: 'Container',
-    IPAHost: 'IPAHost',
     MemberOf: 'MemberOf',
     AllowedToDelegate: 'AllowedToDelegate',
     AllowedToAct: 'AllowedToAct',
@@ -183,7 +182,10 @@ const AzurehoundKindLabels = {
 export const IPALabels = {
     Base: 'IPABase',
     User: 'IPAUser',
-    Group: 'IPAGroup',
+    Host: 'IPAHost',
+    UserGroup: 'IPAUserGroup',
+    HostGroup: 'IPAHostGroup',
+    NetGroup: 'IPANetGroup',
     MemberOf: 'IPAMemberOf',
 };
 
@@ -918,60 +920,23 @@ export function buildDomainJsonNew(chunk) {
 
 /**
  *
- * @param {Array.<IPAHost>} chunk
- * @returns {{}}
- */
-export function buildIPAHostJsonNew(chunk) {
-    let queries = {};
-    queries.properties = {};
-    queries.properties.statement = FREEIPA_PROP_QUERY.format(ADLabels.IPAHost);
-    queries.properties.props = [];
-
-    for (let computer of chunk) {
-        let ipauniqueid = computer.ipauniqueid;
-        let properties = computer.Properties;
-        //let localAdmins = computer.LocalAdmins.Results;
-        //let rdp = computer.RemoteDesktopUsers.Results;
-        //let dcom = computer.DcomUsers.Results;
-        //let psremote = computer.PSRemoteUsers.Results;
-        //let primaryGroup = computer.PrimaryGroupSID;
-        //let allowedToAct = computer.AllowedToAct;
-        //let allowedToDelegate = computer.AllowedToDelegate;
-        //let sessions = computer.Sessions.Results;
-        //let privSessions = computer.PrivilegedSessions.Results;
-        //let regSessions = computer.RegistrySessions.Results;
-        let aces = computer.Aces;
-        //let dumpSMSAPassword = computer.DumpSMSAPassword;
-
-        queries.properties.props.push({
-            objectid: ipauniqueid,
-            map: properties,
-        });
-
-        processAceArrayNew(aces, ipauniqueid, ADLabels.IPAHost, queries);
-
-
-    }
-    return queries;
-}
-
-/**
- *
  * @param {Array.<IPABase>} chunk
  * @return {{}}
  */
 export function convertFreeIPAData(chunk) {
-    let queries = [];
+    let queries = {};
     let ipa_handler = new Map();
 
     ipa_handler.set('person', buildIPAUserJsonNew);
+    ipa_handler.set('ipahost', buildIPAHostJsonNew);
+    ipa_handler.set('ipausergroup', buildIPAUserGroupJsonNew);
+    ipa_handler.set('ipahostgroup', buildIPAHostGroupJsonNew);
+    ipa_handler.set('ipanisnetgroup', buildIPANetGroupJsonNew);
 
     for (let object of chunk) {
-        // return ipa_handler.get('person')([object]);
         for (let object_class of object.Properties.objectclass) {
             if (ipa_handler.has(object_class)) {
-                queries.push(ipa_handler.get(object_class)(object));
-                // return ipa_handler.get(object_class)([object]);
+                ipa_handler.get(object_class)(object, queries);
                 break;
             }
         }
@@ -982,75 +947,177 @@ export function convertFreeIPAData(chunk) {
 /**
  *
  * @param {IPAUser} user
- * @return {{}}
+ * @param {Object} queries
  */
-export function buildIPAUserJsonNew(user) {
-    let queries = {};
-    queries.properties = {
-        statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
-        props: [],
-    };
+export function buildIPAUserJsonNew(user, queries) {
 
-    // for (let user of chunk) {
-        console.log(user);
-        let properties = user.Properties;
-        let ipauniqueid = user.Properties.ipauniqueid;
-        //let identifier = user.ObjectIdentifier;
-        //let primaryGroup = user.PrimaryGroupSID;
-        //let allowedToDelegate = user.AllowedToDelegate;
-        //let spnTargets = user.SPNTargets;
-        //let sidHistory = user.HasSIDHistory;
-        let aces = user.Aces;
+    if (!(queries[IPALabels.User])) {
+        queries[IPALabels.User] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
+            props: [],
+        };
+    }
 
-        processAceArrayNew(aces, ipauniqueid, IPALabels.User, queries);
+    let properties = user.Properties;
+    let ipauniqueid = user.Properties.ipauniqueid;
+    let objectid = `${IPALabels.User}-${user.Properties.uid}`;
+    let aces = user.Aces;    
 
-        queries.properties.props.push({
-            objectid: ipauniqueid,
-            map: properties,
-        });
-        
-    // }
-    return queries;
+    processAceArrayNewIPA(aces, ipauniqueid, IPALabels.User, queries);
+
+    queries[IPALabels.User].props.push({
+        objectid: objectid,
+        map: properties,
+    });
 }
 
 /**
  *
- * @param {Array.<IPAGroup>} chunk
- * @returns {{}}
+ * @param {IPAHost} host
+ * @param {Object} queries
  */
-export function buildIPAGroupJsonNew(chunk) {
-    let queries = {};
-    queries.properties = {};
-    queries.properties.statement = FREEIPA_PROP_QUERY.format(IPALabels.Group);
-    queries.properties.props = [];
+export function buildIPAHostJsonNew(host, queries) {
 
-    for (let group of chunk) {
-        let properties = group.Properties;
-        let ipauniqueid = group.ipauniqueid;
-        let aces = group.Aces;
-        let members = group.Members;
+    if (!(queries[IPALabels.Host])) {
+        queries[IPALabels.Host] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Host),
+            props: [],
+        };
+    }
 
-        queries.properties.props.push({
-            objectid: ipauniqueid,
-            map: properties,
+    let ipauniqueid = host.Properties.ipauniqueid;
+    let properties = host.Properties;
+    let objectid = `${IPALabels.Host}-${host.Properties.serverhostname}`;
+    let aces = host.Aces;
+
+    queries[IPALabels.Host].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+    processAceArrayNewIPA(aces, ipauniqueid, ADLabels.IPAHost, queries);
+}
+
+
+/**
+ *
+ * @param {IPAUserGroup} group
+ * @param {Object} queries
+ */
+export function buildIPAUserGroupJsonNew(group, queries) {
+    buildIPAGroupJsonNew(group, queries, IPALabels.UserGroup);
+}
+
+/**
+ *
+ * @param {IPAHostGroup} group
+ * @param {Object} queries
+ */
+export function buildIPAHostGroupJsonNew(group, queries) {
+    buildIPAGroupJsonNew(group, queries, IPALabels.HostGroup);
+}
+
+/**
+ *
+ * @param {IPANetGroup} group
+ * @param {Object} queries
+ */
+export function buildIPANetGroupJsonNew(group, queries) {
+    buildIPAGroupJsonNew(group, queries, IPALabels.NetGroup);
+}
+
+/**
+ *
+ * @param {IPAUserGroup} group
+ * @param {Object} queries
+ * @param {string} group_type
+ */
+export function buildIPAGroupJsonNew(group, queries, group_type) {
+
+    if (!(queries[group_type])) {
+        queries[group_type] = {
+            statement: FREEIPA_PROP_QUERY.format(group_type),
+            props: [],
+        };
+    }
+
+    let properties = group.Properties;
+    let ipauniqueid = group.Properties.ipauniqueid;
+    let objectid = `${group_type}-${group.Properties.name}`;
+    let aces = group.Aces;
+    let members = group.Members;
+
+    queries[group_type].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+    processAceArrayNewIPA(aces, ipauniqueid, group_type, queries);
+
+    let format = ['', group_type, IPALabels.MemberOf, NON_ACL_PROPS];
+
+    let grouped = groupBy(members, 'type');
+
+    for (let objectType in grouped) {
+        format[0] = objectType;
+        let props = grouped[objectType].map((member) => {
+            return { source: `${objectType}-${member.uid}`, target: objectid };
+        });
+        insertNewIPA(queries, format, props);
+    }
+}
+
+/**
+ *
+ * @param {Array.<ACE>} aces
+ * @param {string} target_object_identifier
+ * @param {string} target_object_type
+ * @param {Object} queries
+ */
+function processAceArrayNewIPA(
+    aces,
+    target_object_identifier,
+    target_object_type,
+    queries
+) {
+    let convertedAces = aces
+        .map((ace) => {
+            if (ace.PrincipalSID === target_object_identifier) return null;
+
+            return {
+                pSid: ace.PrincipalSID,
+                right: ace.RightName,
+                pType: ace.PrincipalType,
+                inherited: ace.IsInherited,
+            };
+        })
+        .filter((cAce) => {
+            return cAce != null;
         });
 
-        processAceArrayNew(aces, ipauniqueid, IPALabels.Group, queries);
+    let rightGrouped = groupBy(convertedAces, 'right');
+    let format = [
+        '',
+        target_object_type,
+        '',
+        '{isacl: true, isinherited: prop.isinherited}',
+    ];
 
-        let format = ['', IPALabels.Group, IPALabels.MemberOf, NON_ACL_PROPS];
-
-        let grouped = groupBy(members, 'type');
-
-        for (let objectType in grouped) {
+    for (let rightName in rightGrouped) {
+        let typeGrouped = groupBy(rightGrouped[rightName], 'pType');
+        for (let objectType in typeGrouped) {
             format[0] = objectType;
-            let props = grouped[objectType].map((member) => {
-                return { source: member.ipauniqueid, target: ipauniqueid };
+            format[2] = rightName;
+            let mapped = typeGrouped[objectType].map((x) => {
+                return {
+                    source: x.pSid,
+                    target: target_object_identifier,
+                    isinherited: x.inherited,
+                };
             });
-
-            insertNewIPA(queries, format, props);
+            insertNew(queries, format, mapped);
         }
     }
-    return queries;
 }
 
 const baseInsertStatement =
