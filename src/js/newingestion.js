@@ -186,7 +186,11 @@ export const IPALabels = {
     UserGroup: 'IPAUserGroup',
     HostGroup: 'IPAHostGroup',
     NetGroup: 'IPANetGroup',
+    Sudo: 'IPASudo',
+    SudoGroup: 'IPASudoGroup',
+    SudoRule: 'IPASudoRule',
     MemberOf: 'IPAMemberOf',
+    SudoRuleTo: 'IPASudoRuleTo'
 };
 
 const DirectoryObjectEntityTypes = {
@@ -932,6 +936,9 @@ export function convertFreeIPAData(chunk) {
     ipa_handler.set('ipausergroup', buildIPAUserGroupJsonNew);
     ipa_handler.set('ipahostgroup', buildIPAHostGroupJsonNew);
     ipa_handler.set('ipanisnetgroup', buildIPANetGroupJsonNew);
+    ipa_handler.set('ipasudocmd', buildIPASudoJsonNew);
+    ipa_handler.set('ipasudocmdgrp', buildIPASudoGroupJsonNew);
+    ipa_handler.set('ipasudorule', buildIPASudoRuleJsonNew);
 
     for (let object of chunk) {
         for (let object_class of object.Properties.objectclass) {
@@ -1028,7 +1035,16 @@ export function buildIPANetGroupJsonNew(group, queries) {
 
 /**
  *
- * @param {IPAUserGroup} group
+ * @param {IPASudoGroup} group
+ * @param {Object} queries
+ */
+export function buildIPASudoGroupJsonNew(group, queries) {
+    buildIPAGroupJsonNew(group, queries, IPALabels.SudoGroup);
+}
+
+/**
+ *
+ * @param {IPAGroup} group
  * @param {Object} queries
  * @param {string} group_type
  */
@@ -1043,16 +1059,19 @@ export function buildIPAGroupJsonNew(group, queries, group_type) {
 
     let properties = group.Properties;
     let ipauniqueid = group.Properties.ipauniqueid;
-    let objectid = `${group_type}-${group.Properties.name}`;
-    let aces = group.Aces;
+    let objectid = `${group_type}-${group.Properties.uid}`;
+
+    if (group.hasOwnProperty('Aces')) {
+        let aces = group.Aces;
+        processAceArrayNewIPA(aces, ipauniqueid, group_type, queries);
+    }
+    
     let members = group.Members;
 
     queries[group_type].props.push({
         objectid: objectid,
         map: properties,
     });
-
-    processAceArrayNewIPA(aces, ipauniqueid, group_type, queries);
 
     let format = ['', group_type, IPALabels.MemberOf, NON_ACL_PROPS];
 
@@ -1063,6 +1082,86 @@ export function buildIPAGroupJsonNew(group, queries, group_type) {
         let props = grouped[objectType].map((member) => {
             return { source: `${objectType}-${member.uid}`, target: objectid };
         });
+        insertNewIPA(queries, format, props);
+    }
+}
+
+/**
+ *
+ * @param {IPASudo} sudo
+ * @param {Object} queries
+ */
+export function buildIPASudoJsonNew(sudo, queries) {
+
+    if (!(queries[IPALabels.Sudo])) {
+        queries[IPALabels.Sudo] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Sudo),
+            props: [],
+        };
+    }
+
+    let properties = sudo.Properties;
+    let objectid = `${IPALabels.Sudo}-${sudo.Properties.uid}`;
+    
+    queries[IPALabels.Sudo].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+}
+
+/**
+ *
+ * @param {IPASudoRule} rule
+ * @param {Object} queries
+ */
+export function buildIPASudoRuleJsonNew(rule, queries) {
+
+    if (!(queries[IPALabels.SudoRule])) {
+        queries[IPALabels.SudoRule] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.SudoRule),
+            props: [],
+        };
+    }
+
+    let properties = rule.Properties;
+    let objectid = `${IPALabels.SudoRule}-${rule.Properties.uid}`;
+    
+    queries[IPALabels.SudoRule].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+    let members = rule.Members;
+    let format = ['', IPALabels.SudoRule, IPALabels.MemberOf, '{isacl: false, allow: prop.allow}'];
+    let grouped_members = groupBy(members, 'type');
+    for (let objectType in grouped_members) {
+        format[0] = objectType;
+        let props = grouped_members[objectType].map((member) => {
+            return { source: `${objectType}-${member.uid}`, target: objectid, allow: member.allow };
+        });
+        insertNewIPA(queries, format, props);
+    }
+
+    let aces = rule.Aces;
+    let grouped_aces = groupBy(aces, 'type');
+
+    for (let objectType in grouped_aces) {
+        let format = ['', '', IPALabels.SudoRuleTo, '{isacl: true}'];
+        let props = {};
+        if (objectType === 'IPAUser' || objectType === 'IPAUserGroup') {
+            format[0] = objectType;
+            format[1] = IPALabels.SudoRule;
+            props = grouped_aces[objectType].map((member) => {
+                return { source: `${objectType}-${member.uid}`, target: objectid };
+            });
+        }
+        if (objectType === 'IPAHost' || objectType === 'IPAHostGroup') {
+            format[0] = IPALabels.SudoRule;
+            format[1] = objectType;
+            props = grouped_aces[objectType].map((member) => {
+                return { source: objectid, target: `${objectType}-${member.uid}` };
+            });
+        }
         insertNewIPA(queries, format, props);
     }
 }

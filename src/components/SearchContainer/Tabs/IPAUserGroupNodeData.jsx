@@ -6,6 +6,7 @@ import CollapsibleSection from './Components/CollapsibleSection';
 import ExtraNodeProps from './Components/ExtraNodeProps';
 import MappedNodeProps from './Components/MappedNodeProps';
 import NodeCypherLink from './Components/NodeCypherLink';
+import NodeCypherLinkComplex from './Components/NodeCypherLinkComplex';
 import NodePlayCypherLink from './Components/NodePlayCypherLink';
 import styles from './NodeData.module.css';
 
@@ -344,6 +345,40 @@ const IPAUserGroupNodeData = () => {
                                     }
                                     end={label}
                                     distinct
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header={'SUDO RULE'}>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLinkComplex
+                                    property='All Sudo Rule'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled Sudo Rule'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
+                                    }
+                                    start={label}
                                 />
                             </tbody>
                         </Table>

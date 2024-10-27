@@ -441,6 +441,40 @@ const IPAHostNodeData = () => {
                         </Table>
                     </div>
                 </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header={'SUDO RULE'}>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLinkComplex
+                                    property='All Sudo Rule'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled Sudo Rule'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
+                                    }
+                                    end={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
                 {/* <Notes objectid={objectid} type='IPAHost' />
                 <NodeGallery
                     objectid={objectid}

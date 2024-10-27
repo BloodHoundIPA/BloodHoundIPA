@@ -403,6 +403,40 @@ const IPAUserNodeData = () => {
                     </div>
                 </CollapsibleSection>
 
+                <hr></hr>
+
+                <CollapsibleSection header={'SUDO RULE'}>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLinkComplex
+                                    property='All Sudo Rule'
+                                    target={objectId}
+                                    countQuery={
+                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled Sudo Rule'
+                                    target={objectId}
+                                    countQuery={
+                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
                 {/* <Notes objectid={objectId} type={'IPAUser'} />
                 <NodeGallery
                     objectid={objectId}
