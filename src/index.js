@@ -174,15 +174,33 @@ global.appStore = {
             },
             IPAHostGroup: {
                 font: "'Font Awesome 5 Free'",
-                content: '\uF0C0',
+                content: '\uF233',
                 scale: 1.5,
                 color: '#DBE617',
             },
             IPANetGroup: {
                 font: "'Font Awesome 5 Free'",
-                content: '\uF0C0',
+                content: '\uF6FF',
                 scale: 1.5,
                 color: '#DBE617',
+            },
+            IPASudo: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf120',
+                scale: 1.5,
+                color: '#17E625',
+            },
+            IPASudoGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf03a',
+                scale: 1.5,
+                color: '#17E625',
+            },
+            IPASudoRule: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf02d',
+                scale: 1.5,
+                color: '#17E625',
             },
             AZUser: {
                 font: "'Font Awesome 5 Free'",

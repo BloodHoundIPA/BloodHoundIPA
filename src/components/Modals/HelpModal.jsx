@@ -79,6 +79,7 @@ import AZKeyVaultKVContributor from './HelpTexts/AZKeyVaultKVContributor/AZKeyVa
 import AZLogicAppContributor from './HelpTexts/AZLogicAppContributor/AZLogicAppContributor';
 import AZNodeResourceGroup from './HelpTexts/AZNodeResourceGroup/AZNodeResourceGroup';
 import IPAMemberOf from './HelpTexts/IPAMemberOf/IPAMemberOf'; 
+import IPASudoRuleTo from './HelpTexts/IPASudoRuleTo/IPASudoRuleTo';
 
 const HelpModal = () => {
     const [sourceName, setSourceName] = useState('');
@@ -193,6 +194,7 @@ const HelpModal = () => {
         AZLogicAppContributor: AZLogicAppContributor,
         AZNodeResourceGroup: AZNodeResourceGroup,
         IPAMemberOf: IPAMemberOf,
+        IPASudoRuleTo: IPASudoRuleTo,
     };
 
     const Component = edge in components ? components[edge] : Default;

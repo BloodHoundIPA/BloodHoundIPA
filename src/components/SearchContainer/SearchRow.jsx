@@ -56,10 +56,19 @@ const SearchRow = ({ item, search }) => {
             icon.className = 'fa fa-users';
             break;
         case 'IPAHostGroup':
-            icon.className = 'fa fa-users';
+            icon.className = 'fa-light fa-server';
             break;
         case 'IPANetGroup':
-            icon.className = 'fa fa-users';
+            icon.className = 'fa-light fa-network-wired';
+            break;
+        case 'IPASudo':
+            icon.className = 'fa fa-terminal';
+            break;
+        case 'IPASudoGroup':
+            icon.className = 'fa-solid fa-list';
+            break;
+        case 'IPASudoRule':
+            icon.className = 'fa-light fa-book';
             break;
         case 'AZUser':
             icon.className = 'fa fa-user';

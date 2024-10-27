@@ -280,6 +280,21 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'IPANetGroup'}
                         />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPASudo) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPASudo'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPASudoGroup) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPASudoGroup'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPASudoRule) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPASudoRule'}
+                        />
                     </tbody>
                 </Table>
             </CollapsibleSection>

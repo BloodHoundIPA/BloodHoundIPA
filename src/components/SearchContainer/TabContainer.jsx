@@ -39,6 +39,9 @@ import IPAHostNodeData from './Tabs/IPAHostNodeData';
 import IPAUserGroupNodeData from './Tabs/IPAUserGroupNodeData';
 import IPAHostGroupNodeData from './Tabs/IPAHostGroupNodeData';
 import IPANetGroupNodeData from './Tabs/IPANetGroupNodeData';
+import IPASudoNodeData from './Tabs/IPASudoNodeData';
+import IPASudoGroupNodeData from './Tabs/IPASudoGroupNodeData';
+import IPASudoRuleNodeData from './Tabs/IPASudoRuleNodeData';
 
 
 class TabContainer extends Component {
@@ -78,6 +81,9 @@ class TabContainer extends Component {
             ipaUserGroupVisible: false,
             ipaHostGroupVisible: false,
             ipaNetGroupVisible: false,
+            ipaSudoVisible: false,
+            ipaSudoGroupVisible: false,
+            ipaSudoRuleVisible: false,
             selected: 1,
         };
     }
@@ -157,6 +163,12 @@ class TabContainer extends Component {
             this._ipaHostGroupNodeClicked();
         } else if (type === 'IPANetGroup') {
             this._ipaNetGroupNodeClicked();
+        } else if (type === 'IPASudo') {
+            this._ipaSudoNodeClicked();
+        } else if (type === 'IPASudoGroup') {
+            this._ipaSudoGroupNodeClicked();
+        } else if (type === 'IPASudoRule') {
+            this._ipaSudoRuleNodeClicked();
         }
     }
 
@@ -283,6 +295,30 @@ class TabContainer extends Component {
         this.clearVisible()
         this.setState({
             ipaNetGroupVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaSudoNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaSudoVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaSudoGroupNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaSudoGroupVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaSudoRuleNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaSudoRuleVisible: true,
             selected: 2
         });
     }
@@ -491,7 +527,10 @@ class TabContainer extends Component {
                                 !this.state.ipaUserVisible &&
                                 !this.state.ipaUserGroupVisible &&
                                 !this.state.ipaHostGroupVisible &&
-                                !this.state.ipaNetGroupVisible
+                                !this.state.ipaNetGroupVisible &&
+                                !this.state.ipaSudoVisible &&
+                                !this.state.ipaSudoGroupVisible &&
+                                !this.state.ipaSudoRuleVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -540,6 +579,9 @@ class TabContainer extends Component {
                         <IPAUserGroupNodeData visible={this.state.ipaUserGroupVisible} />
                         <IPAHostGroupNodeData visible={this.state.ipaHostGroupVisible} />
                         <IPANetGroupNodeData visible={this.state.ipaNetGroupVisible} />
+                        <IPASudoNodeData visible={this.state.ipaSudoVisible} />
+                        <IPASudoGroupNodeData visible={this.state.ipaSudoGroupVisible} />
+                        <IPASudoRuleNodeData visible={this.state.ipaSudoRuleVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>
