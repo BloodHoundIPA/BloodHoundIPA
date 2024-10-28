@@ -70,6 +70,15 @@ const SearchRow = ({ item, search }) => {
         case 'IPASudoRule':
             icon.className = 'fa-light fa-book';
             break;
+        case 'IPAHBACRule':
+            icon.className = 'fa fa-list-check';
+            break;
+        case 'IPAHBACService':
+            icon.className = 'fa fa-check';
+            break;
+        case 'IPAHBACServiceGroup':
+            icon.className = 'fa fa-check-double';
+            break;
         case 'AZUser':
             icon.className = 'fa fa-user';
             break;
