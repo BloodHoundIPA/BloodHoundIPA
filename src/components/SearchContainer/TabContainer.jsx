@@ -42,6 +42,9 @@ import IPANetGroupNodeData from './Tabs/IPANetGroupNodeData';
 import IPASudoNodeData from './Tabs/IPASudoNodeData';
 import IPASudoGroupNodeData from './Tabs/IPASudoGroupNodeData';
 import IPASudoRuleNodeData from './Tabs/IPASudoRuleNodeData';
+import IPAHBACRuleNodeData from './Tabs/IPAHBACRuleNodeData';
+import IPAHBACServiceNodeData from './Tabs/IPAHBACServiceNodeData';
+import IPAHBACServiceGroupNodeData from './Tabs/IPAHBACServiceGroupNodeData';
 
 
 class TabContainer extends Component {
@@ -84,6 +87,9 @@ class TabContainer extends Component {
             ipaSudoVisible: false,
             ipaSudoGroupVisible: false,
             ipaSudoRuleVisible: false,
+            ipaHBACRuleVisible: false,
+            ipaHBACServiceVisible: false,
+            ipaHBACServiceGroupVisible: false,
             selected: 1,
         };
     }
@@ -169,6 +175,12 @@ class TabContainer extends Component {
             this._ipaSudoGroupNodeClicked();
         } else if (type === 'IPASudoRule') {
             this._ipaSudoRuleNodeClicked();
+        } else if (type === 'IPAHBACRule') {
+            this._ipaHBACRuleNodeClicked(); 
+        } else if (type === 'IPAHBACService') {
+            this._ipaHBACServiceNodeClicked();
+        } else if (type === 'IPAHBACServiceGroup') {
+            this._ipaHBACServiceGroupNodeClicked();
         }
     }
 
@@ -319,6 +331,29 @@ class TabContainer extends Component {
         this.clearVisible()
         this.setState({
             ipaSudoRuleVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaHBACRuleNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaHBACRuleVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaHBACServiceNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaHBACServiceVisible: true,
+            selected: 2
+        });
+    }
+    _ipaHBACServiceGroupNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaHBACServiceGroupVisible: true,
             selected: 2
         });
     }
@@ -530,7 +565,10 @@ class TabContainer extends Component {
                                 !this.state.ipaNetGroupVisible &&
                                 !this.state.ipaSudoVisible &&
                                 !this.state.ipaSudoGroupVisible &&
-                                !this.state.ipaSudoRuleVisible
+                                !this.state.ipaSudoRuleVisible &&
+                                !this.state.ipaHBACRuleVisible &&
+                                !this.state.ipaHBACServiceVisible &&
+                                !this.state.ipaHBACServiceGroupVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -582,6 +620,10 @@ class TabContainer extends Component {
                         <IPASudoNodeData visible={this.state.ipaSudoVisible} />
                         <IPASudoGroupNodeData visible={this.state.ipaSudoGroupVisible} />
                         <IPASudoRuleNodeData visible={this.state.ipaSudoRuleVisible} />
+                        <IPAHBACRuleNodeData visible={this.state.ipaHBACRuleVisible} />
+                        <IPAHBACServiceNodeData visible={this.state.ipaHBACServiceVisible} />
+                        <IPAHBACServiceGroupNodeData visible={this.state.ipaHBACServiceGroupVisible} />
+
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>

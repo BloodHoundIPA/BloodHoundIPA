@@ -190,7 +190,11 @@ export const IPALabels = {
     SudoGroup: 'IPASudoGroup',
     SudoRule: 'IPASudoRule',
     MemberOf: 'IPAMemberOf',
-    SudoRuleTo: 'IPASudoRuleTo'
+    SudoRuleTo: 'IPASudoRuleTo',
+    HBACService: 'IPAHBACService',
+    HBACServiceGroup: 'IPAHBACServiceGroup',
+    HBACRuleTo: 'IPAHBACRuleTo',
+    HBACRule: 'IPAHBACRule'
 };
 
 const DirectoryObjectEntityTypes = {
@@ -939,6 +943,9 @@ export function convertFreeIPAData(chunk) {
     ipa_handler.set('ipasudocmd', buildIPASudoJsonNew);
     ipa_handler.set('ipasudocmdgrp', buildIPASudoGroupJsonNew);
     ipa_handler.set('ipasudorule', buildIPASudoRuleJsonNew);
+    ipa_handler.set('ipahbacrule', buildIPAHBACRuleJsonNew);
+    ipa_handler.set('ipahbacservice', buildIPAHBACServiceJsonNew);
+    ipa_handler.set('ipahbacservicegroup', buildIPAHBACServiceGroupJsonNew);
 
     for (let object of chunk) {
         for (let object_class of object.Properties.objectclass) {
@@ -1035,6 +1042,15 @@ export function buildIPANetGroupJsonNew(group, queries) {
 
 /**
  *
+ * @param {IPAHBACServiceGroup} group
+ * @param {Object} queries
+ */
+export function buildIPAHBACServiceGroupJsonNew(group, queries) {
+    buildIPAGroupJsonNew(group, queries, IPALabels.HBACServiceGroup);
+}
+
+/**
+ *
  * @param {IPASudoGroup} group
  * @param {Object} queries
  */
@@ -1111,6 +1127,28 @@ export function buildIPASudoJsonNew(sudo, queries) {
 
 /**
  *
+ * @param {IPAHBACService} hbacservice
+ * @param {Object} queries
+ */
+export function buildIPAHBACServiceJsonNew(hbacservice, queries) {
+    if (!(queries[IPALabels.HBACService])) {
+        queries[IPALabels.HBACService] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACService),
+            props: [],
+        };
+    }
+
+    let properties = hbacservice.Properties;
+    let objectid = `${IPALabels.HBACService}-${hbacservice.Properties.uid}`;
+    
+    queries[IPALabels.HBACService].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+}
+
+/**
+ *
  * @param {IPASudoRule} rule
  * @param {Object} queries
  */
@@ -1165,6 +1203,66 @@ export function buildIPASudoRuleJsonNew(rule, queries) {
         insertNewIPA(queries, format, props);
     }
 }
+
+
+/**
+ *
+ * @param {IPAHBACRule} rule
+ * @param {Object} queries
+ */
+export function buildIPAHBACRuleJsonNew(rule, queries) {
+    
+    if (!(queries[IPALabels.HBACRule])) {
+        queries[IPALabels.HBACRule] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACRule),
+            props: [],
+        };
+    }
+
+    let properties = rule.Properties;
+    let objectid = `${IPALabels.HBACRule}-${rule.Properties.uid}`;
+    
+    queries[IPALabels.HBACRule].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+    let members = rule.Members;
+    let format = ['', IPALabels.HBACRule, IPALabels.MemberOf, '{isacl: false, allow: prop.allow}'];
+    let grouped_members = groupBy(members, 'type');
+    for (let objectType in grouped_members) {
+        format[0] = objectType;
+        let props = grouped_members[objectType].map((member) => {
+            return { source: `${objectType}-${member.uid}`, target: objectid, allow: member.allow };
+        });
+        insertNewIPA(queries, format, props);
+    }
+
+    let aces = rule.Aces;
+    let grouped_aces = groupBy(aces, 'type');
+
+    for (let objectType in grouped_aces) {
+        let format = ['', '', IPALabels.HBACRuleTo, '{isacl: true}'];
+        let props = {};
+        if (objectType === 'IPAUser' || objectType === 'IPAUserGroup') {
+            format[0] = objectType;
+            format[1] = IPALabels.HBACRule;
+            props = grouped_aces[objectType].map((member) => {
+                return { source: `${objectType}-${member.uid}`, target: objectid };
+            });
+        }
+        if (objectType === 'IPAHost' || objectType === 'IPAHostGroup') {
+            format[0] = IPALabels.HBACRule;
+            format[1] = objectType;
+            props = grouped_aces[objectType].map((member) => {
+                return { source: objectid, target: `${objectType}-${member.uid}` };
+            });
+        }
+        insertNewIPA(queries, format, props);
+    }
+
+}
+
 
 /**
  *
