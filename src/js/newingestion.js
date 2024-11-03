@@ -1108,7 +1108,6 @@ export function buildIPAGroupJsonNew(group, queries, group_type) {
  * @param {Object} queries
  */
 export function buildIPASudoJsonNew(sudo, queries) {
-
     if (!(queries[IPALabels.Sudo])) {
         queries[IPALabels.Sudo] = {
             statement: FREEIPA_PROP_QUERY.format(IPALabels.Sudo),

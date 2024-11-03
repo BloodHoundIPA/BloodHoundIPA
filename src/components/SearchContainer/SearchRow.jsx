@@ -72,6 +72,10 @@ const SearchRow = ({ item, search }) => {
             break;
         case 'IPAHBACRule':
             icon.className = 'fa fa-list-check';
+        case 'IPAHBACService':
+            icon.className = 'fa fa-check';
+        case 'IPAHBACServiceGroup':
+            icon.className = 'fa fa-check-double';
             break;
         case 'IPAHBACService':
             icon.className = 'fa fa-check';

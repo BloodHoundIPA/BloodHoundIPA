@@ -176,12 +176,12 @@ class TabContainer extends Component {
         } else if (type === 'IPASudoRule') {
             this._ipaSudoRuleNodeClicked();
         } else if (type === 'IPAHBACRule') {
-            this._ipaHBACRuleNodeClicked(); 
+            this._ipaHBACRuleNodeClicked();
         } else if (type === 'IPAHBACService') {
             this._ipaHBACServiceNodeClicked();
         } else if (type === 'IPAHBACServiceGroup') {
             this._ipaHBACServiceGroupNodeClicked();
-        }
+        } 
     }
 
     componentDidMount() {
@@ -350,6 +350,7 @@ class TabContainer extends Component {
             selected: 2
         });
     }
+
     _ipaHBACServiceGroupNodeClicked() {
         this.clearVisible()
         this.setState({
@@ -569,6 +570,7 @@ class TabContainer extends Component {
                                 !this.state.ipaHBACRuleVisible &&
                                 !this.state.ipaHBACServiceVisible &&
                                 !this.state.ipaHBACServiceGroupVisible
+
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -623,7 +625,6 @@ class TabContainer extends Component {
                         <IPAHBACRuleNodeData visible={this.state.ipaHBACRuleVisible} />
                         <IPAHBACServiceNodeData visible={this.state.ipaHBACServiceVisible} />
                         <IPAHBACServiceGroupNodeData visible={this.state.ipaHBACServiceGroupVisible} />
-
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>
