@@ -295,6 +295,26 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'IPASudoRule'}
                         />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPARole) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPARole'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAPrivilege) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAPrivilege'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAPermission) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAPermission'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAService) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAService'}
+                        />
                     </tbody>
                 </Table>
             </CollapsibleSection>

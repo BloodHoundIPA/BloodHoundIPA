@@ -70,6 +70,18 @@ const SearchRow = ({ item, search }) => {
         case 'IPASudoRule':
             icon.className = 'fa-light fa-book';
             break;
+        case 'IPARole':
+            icon.className = 'fa-light fa-address-book';
+            break;
+        case 'IPAPrivilege':
+            icon.className = 'fa-light fa-arrow-up-from-bracket';
+            break;
+        case 'IPAPermission':
+            icon.className = 'fa-light fa-arrow-up';
+            break;
+        case 'IPAService':
+            icon.className = 'fa-light fa-gear';
+            break;
         case 'AZUser':
             icon.className = 'fa fa-user';
             break;
