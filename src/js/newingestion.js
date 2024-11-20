@@ -189,6 +189,10 @@ export const IPALabels = {
     Sudo: 'IPASudo',
     SudoGroup: 'IPASudoGroup',
     SudoRule: 'IPASudoRule',
+    Role: 'IPARole',
+    Privilege: 'IPAPrivilege',
+    Permission: 'IPAPermission',
+    Service: 'IPAService',
     MemberOf: 'IPAMemberOf',
     SudoRuleTo: 'IPASudoRuleTo',
     HBACService: 'IPAHBACService',
@@ -946,6 +950,10 @@ export function convertFreeIPAData(chunk) {
     ipa_handler.set('ipahbacrule', buildIPAHBACRuleJsonNew);
     ipa_handler.set('ipahbacservice', buildIPAHBACServiceJsonNew);
     ipa_handler.set('ipahbacservicegroup', buildIPAHBACServiceGroupJsonNew);
+    ipa_handler.set('ipapermission', buildIPAPermissionJsonNew);
+    ipa_handler.set('ipaprivilege', buildIPAPrivilegeJsonNew);
+    ipa_handler.set('iparole', buildIPARoleJsonNew);
+    ipa_handler.set('ipaservice', buildIPAServiceJsonNew);
 
     for (let object of chunk) {
         for (let object_class of object.Properties.objectclass) {
@@ -1167,6 +1175,102 @@ export function buildIPAHBACRuleJsonNew(rule, queries) {
     let objectid = `${IPALabels.HBACRule}-${rule.Properties.object_id}`;
     
     queries[IPALabels.HBACRule].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+}
+
+/**
+ *
+ * @param {IPARole} role
+ * @param {Object} queries
+ */
+export function buildIPARoleJsonNew(role, queries) {
+
+    if (!(queries[IPALabels.Role])) {
+        queries[IPALabels.Role] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Role),
+            props: [],
+        };
+    }
+
+    let properties = role.Properties;
+    let objectid = `${IPALabels.Role}-${role.Properties.object_id}`;
+    
+    queries[IPALabels.Role].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+}
+
+/**
+ *
+ * @param {IPAPrivilege} privilege
+ * @param {Object} queries
+ */
+export function buildIPAPrivilegeJsonNew(privilege, queries) {
+
+    if (!(queries[IPALabels.Privilege])) {
+        queries[IPALabels.Privilege] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Privilege),
+            props: [],
+        };
+    }
+
+    let properties = privilege.Properties;
+    let objectid = `${IPALabels.Privilege}-${privilege.Properties.object_id}`;
+    
+    queries[IPALabels.Privilege].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+}
+
+/**
+ *
+ * @param {IPAPermission} permission
+ * @param {Object} queries
+ */
+export function buildIPAPermissionJsonNew(permission, queries) {
+
+    if (!(queries[IPALabels.Permission])) {
+        queries[IPALabels.Permission] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Permission),
+            props: [],
+        };
+    }
+
+    let properties = permission.Properties;
+    let objectid = `${IPALabels.Permission}-${permission.Properties.object_id}`;
+    
+    queries[IPALabels.Permission].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+
+}
+
+/**
+ *
+ * @param {IPAService} service
+ * @param {Object} queries
+ */
+export function buildIPAServiceJsonNew(service, queries) {
+
+    if (!(queries[IPALabels.Service])) {
+        queries[IPALabels.Service] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.Service),
+            props: [],
+        };
+    }
+
+    let properties = service.Properties;
+    let objectid = `${IPALabels.Service}-${service.Properties.object_id}`;
+    
+    queries[IPALabels.Service].props.push({
         objectid: objectid,
         map: properties,
     });

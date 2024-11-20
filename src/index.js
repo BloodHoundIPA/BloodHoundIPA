@@ -220,6 +220,30 @@ global.appStore = {
                 scale: 1.5,
                 color: '#DBE617',
             },
+            IPARole: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf2b9',
+                scale: 1.5,
+                color: '#17E625',
+            },
+            IPAPrivilege: {
+                font: "'Font Awesome 5 Free'",
+                content: '\ue09a',
+                scale: 1.5,
+                color: '#17E625',
+            },
+            IPAPermission: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf062',
+                scale: 1.5,
+                color: '#17E625',
+            },
+            IPAService: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf013',
+                scale: 1.5,
+                color: '#17E625',
+            },
             AZUser: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uf007',

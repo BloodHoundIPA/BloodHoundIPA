@@ -76,6 +76,17 @@ const SearchRow = ({ item, search }) => {
             icon.className = 'fa fa-check';
         case 'IPAHBACServiceGroup':
             icon.className = 'fa fa-check-double';
+        case 'IPARole':
+            icon.className = 'fa-light fa-address-book';
+            break;
+        case 'IPAPrivilege':
+            icon.className = 'fa-light fa-arrow-up-from-bracket';
+            break;
+        case 'IPAPermission':
+            icon.className = 'fa-light fa-arrow-up';
+            break;
+        case 'IPAService':
+            icon.className = 'fa-light fa-gear';
             break;
         case 'AZUser':
             icon.className = 'fa fa-user';
