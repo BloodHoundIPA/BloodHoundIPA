@@ -951,6 +951,8 @@ export function convertFreeIPAData(chunk) {
         for (let object_class of object.Properties.objectclass) {
             if (ipa_handler.has(object_class)) {
                 ipa_handler.get(object_class)(object, queries);
+                if (object.hasOwnProperty('Edges'))
+                    insertEdges(queries, object.Edges);
                 break;
             }
         }
@@ -973,17 +975,15 @@ export function buildIPAUserJsonNew(user, queries) {
     }
 
     let properties = user.Properties;
-    let ipauniqueid = user.Properties.ipauniqueid;
-    let objectid = `${IPALabels.User}-${user.Properties.uid}`;
-    let aces = user.Aces;    
-
-    processAceArrayNewIPA(aces, ipauniqueid, IPALabels.User, queries);
+    let objectid = `${IPALabels.User}-${user.Properties.object_id}`;
 
     queries[IPALabels.User].props.push({
         objectid: objectid,
         map: properties,
     });
+
 }
+
 
 /**
  *
@@ -999,17 +999,14 @@ export function buildIPAHostJsonNew(host, queries) {
         };
     }
 
-    let ipauniqueid = host.Properties.ipauniqueid;
     let properties = host.Properties;
-    let objectid = `${IPALabels.Host}-${host.Properties.serverhostname}`;
-    let aces = host.Aces;
+    let objectid = `${IPALabels.Host}-${host.Properties.object_id}`;
 
     queries[IPALabels.Host].props.push({
         objectid: objectid,
         map: properties,
     });
 
-    processAceArrayNewIPA(aces, ipauniqueid, ADLabels.IPAHost, queries);
 }
 
 
@@ -1074,32 +1071,13 @@ export function buildIPAGroupJsonNew(group, queries, group_type) {
     }
 
     let properties = group.Properties;
-    let ipauniqueid = group.Properties.ipauniqueid;
-    let objectid = `${group_type}-${group.Properties.uid}`;
-
-    if (group.hasOwnProperty('Aces')) {
-        let aces = group.Aces;
-        processAceArrayNewIPA(aces, ipauniqueid, group_type, queries);
-    }
-    
-    let members = group.Members;
+    let objectid = `${group_type}-${group.Properties.object_id}`;
 
     queries[group_type].props.push({
         objectid: objectid,
         map: properties,
     });
 
-    let format = ['', group_type, IPALabels.MemberOf, NON_ACL_PROPS];
-
-    let grouped = groupBy(members, 'type');
-
-    for (let objectType in grouped) {
-        format[0] = objectType;
-        let props = grouped[objectType].map((member) => {
-            return { source: `${objectType}-${member.uid}`, target: objectid };
-        });
-        insertNewIPA(queries, format, props);
-    }
 }
 
 /**
@@ -1116,34 +1094,13 @@ export function buildIPASudoJsonNew(sudo, queries) {
     }
 
     let properties = sudo.Properties;
-    let objectid = `${IPALabels.Sudo}-${sudo.Properties.uid}`;
+    let objectid = `${IPALabels.Sudo}-${sudo.Properties.object_id}`;
     
     queries[IPALabels.Sudo].props.push({
         objectid: objectid,
         map: properties,
     });
-}
 
-/**
- *
- * @param {IPAHBACService} hbacservice
- * @param {Object} queries
- */
-export function buildIPAHBACServiceJsonNew(hbacservice, queries) {
-    if (!(queries[IPALabels.HBACService])) {
-        queries[IPALabels.HBACService] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACService),
-            props: [],
-        };
-    }
-
-    let properties = hbacservice.Properties;
-    let objectid = `${IPALabels.HBACService}-${hbacservice.Properties.uid}`;
-    
-    queries[IPALabels.HBACService].props.push({
-        objectid: objectid,
-        map: properties,
-    });
 }
 
 /**
@@ -1161,48 +1118,36 @@ export function buildIPASudoRuleJsonNew(rule, queries) {
     }
 
     let properties = rule.Properties;
-    let objectid = `${IPALabels.SudoRule}-${rule.Properties.uid}`;
+    let objectid = `${IPALabels.SudoRule}-${rule.Properties.object_id}`;
     
     queries[IPALabels.SudoRule].props.push({
         objectid: objectid,
         map: properties,
     });
 
-    let members = rule.Members;
-    let format = ['', IPALabels.SudoRule, IPALabels.MemberOf, '{isacl: false, allow: prop.allow}'];
-    let grouped_members = groupBy(members, 'type');
-    for (let objectType in grouped_members) {
-        format[0] = objectType;
-        let props = grouped_members[objectType].map((member) => {
-            return { source: `${objectType}-${member.uid}`, target: objectid, allow: member.allow };
-        });
-        insertNewIPA(queries, format, props);
-    }
-
-    let aces = rule.Aces;
-    let grouped_aces = groupBy(aces, 'type');
-
-    for (let objectType in grouped_aces) {
-        let format = ['', '', IPALabels.SudoRuleTo, '{isacl: true}'];
-        let props = {};
-        if (objectType === 'IPAUser' || objectType === 'IPAUserGroup') {
-            format[0] = objectType;
-            format[1] = IPALabels.SudoRule;
-            props = grouped_aces[objectType].map((member) => {
-                return { source: `${objectType}-${member.uid}`, target: objectid };
-            });
-        }
-        if (objectType === 'IPAHost' || objectType === 'IPAHostGroup') {
-            format[0] = IPALabels.SudoRule;
-            format[1] = objectType;
-            props = grouped_aces[objectType].map((member) => {
-                return { source: objectid, target: `${objectType}-${member.uid}` };
-            });
-        }
-        insertNewIPA(queries, format, props);
-    }
 }
 
+/**
+ *
+ * @param {IPAHBACService} hbacservice
+ * @param {Object} queries
+ */
+export function buildIPAHBACServiceJsonNew(hbacservice, queries) {
+    if (!(queries[IPALabels.HBACService])) {
+        queries[IPALabels.HBACService] = {
+            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACService),
+            props: [],
+        };
+    }
+
+    let properties = hbacservice.Properties;
+    let objectid = `${IPALabels.HBACService}-${hbacservice.Properties.object_id}`;
+    
+    queries[IPALabels.HBACService].props.push({
+        objectid: objectid,
+        map: properties,
+    });
+}
 
 /**
  *
@@ -1210,7 +1155,7 @@ export function buildIPASudoRuleJsonNew(rule, queries) {
  * @param {Object} queries
  */
 export function buildIPAHBACRuleJsonNew(rule, queries) {
-    
+
     if (!(queries[IPALabels.HBACRule])) {
         queries[IPALabels.HBACRule] = {
             statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACRule),
@@ -1219,101 +1164,13 @@ export function buildIPAHBACRuleJsonNew(rule, queries) {
     }
 
     let properties = rule.Properties;
-    let objectid = `${IPALabels.HBACRule}-${rule.Properties.uid}`;
+    let objectid = `${IPALabels.HBACRule}-${rule.Properties.object_id}`;
     
     queries[IPALabels.HBACRule].props.push({
         objectid: objectid,
         map: properties,
     });
 
-    let members = rule.Members;
-    let format = ['', IPALabels.HBACRule, IPALabels.MemberOf, '{isacl: false, allow: prop.allow}'];
-    let grouped_members = groupBy(members, 'type');
-    for (let objectType in grouped_members) {
-        format[0] = objectType;
-        let props = grouped_members[objectType].map((member) => {
-            return { source: `${objectType}-${member.uid}`, target: objectid, allow: member.allow };
-        });
-        insertNewIPA(queries, format, props);
-    }
-
-    let aces = rule.Aces;
-    let grouped_aces = groupBy(aces, 'type');
-
-    for (let objectType in grouped_aces) {
-        let format = ['', '', IPALabels.HBACRuleTo, '{isacl: true}'];
-        let props = {};
-        if (objectType === 'IPAUser' || objectType === 'IPAUserGroup') {
-            format[0] = objectType;
-            format[1] = IPALabels.HBACRule;
-            props = grouped_aces[objectType].map((member) => {
-                return { source: `${objectType}-${member.uid}`, target: objectid };
-            });
-        }
-        if (objectType === 'IPAHost' || objectType === 'IPAHostGroup') {
-            format[0] = IPALabels.HBACRule;
-            format[1] = objectType;
-            props = grouped_aces[objectType].map((member) => {
-                return { source: objectid, target: `${objectType}-${member.uid}` };
-            });
-        }
-        insertNewIPA(queries, format, props);
-    }
-
-}
-
-
-/**
- *
- * @param {Array.<ACE>} aces
- * @param {string} target_object_identifier
- * @param {string} target_object_type
- * @param {Object} queries
- */
-function processAceArrayNewIPA(
-    aces,
-    target_object_identifier,
-    target_object_type,
-    queries
-) {
-    let convertedAces = aces
-        .map((ace) => {
-            if (ace.PrincipalSID === target_object_identifier) return null;
-
-            return {
-                pSid: ace.PrincipalSID,
-                right: ace.RightName,
-                pType: ace.PrincipalType,
-                inherited: ace.IsInherited,
-            };
-        })
-        .filter((cAce) => {
-            return cAce != null;
-        });
-
-    let rightGrouped = groupBy(convertedAces, 'right');
-    let format = [
-        '',
-        target_object_type,
-        '',
-        '{isacl: true, isinherited: prop.isinherited}',
-    ];
-
-    for (let rightName in rightGrouped) {
-        let typeGrouped = groupBy(rightGrouped[rightName], 'pType');
-        for (let objectType in typeGrouped) {
-            format[0] = objectType;
-            format[2] = rightName;
-            let mapped = typeGrouped[objectType].map((x) => {
-                return {
-                    source: x.pSid,
-                    target: target_object_identifier,
-                    isinherited: x.inherited,
-                };
-            });
-            insertNew(queries, format, mapped);
-        }
-    }
 }
 
 const baseInsertStatement =
@@ -1358,29 +1215,22 @@ function insertNew(queries, formatProps, queryProps) {
     }
 }
 
-function insertNewIPA(queries, formatProps, queryProps) {
-    if (formatProps.length < 4) {
-        throw new NotEnoughArgumentsException();
-    }
-    if (queryProps.length === 0) {
-        return;
-    }
-
-    if (formatProps[0] === 'Unknown') {
-        formatProps[0] = 'IPABase';
-    }
-
-    if (formatProps[1] === 'Unknown') {
-        formatProps[1] = 'IPABase';
-    }
-
-    let hash = `${formatProps[0]}-${formatProps[1]}-${formatProps[2]}`;
-    if (queries[hash]) {
-        queries[hash].props = queries[hash].props.concat(queryProps);
-    } else {
-        queries[hash] = {};
-        queries[hash].statement = ipaInsertStatement.formatn(...formatProps);
-        queries[hash].props = [].concat(queryProps);
+function insertEdges(queries, edges) {
+    for (let edge of edges) {
+        let properties = '{';
+        for (var key in edge.edge.properties)
+            properties = `${properties}, ${key}: ${edge.edge.properties[key]}`;
+        properties = `${properties}}`;
+        let formatProps = [edge.source.type, edge.target.type, edge.edge.type, properties];
+        let props = { source: `${edge.source.type}-${edge.source.uid}`, target: `${edge.target.type}-${edge.target.uid}`};
+        let hash = `${formatProps[0]}-${formatProps[1]}-${formatProps[2]}-${formatProps[3]}`;
+        if (queries[hash]) {
+            queries[hash].props = queries[hash].props.concat(props);
+        } else {
+            queries[hash] = {};
+            queries[hash].statement = ipaInsertStatement.formatn(...formatProps);
+            queries[hash].props = [].concat(props);
+        }
     }
 }
 
