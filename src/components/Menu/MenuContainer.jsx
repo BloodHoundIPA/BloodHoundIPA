@@ -309,6 +309,7 @@ const MenuContainer = () => {
                         }
                     }
                 } else {
+                    console.log(processedData);
                     for (let key in processedData) {
                         let props = processedData[key].props;
                         if (props.length === 0) continue;
