@@ -189,16 +189,17 @@ export const IPALabels = {
     Sudo: 'IPASudo',
     SudoGroup: 'IPASudoGroup',
     SudoRule: 'IPASudoRule',
+    HBACService: 'IPAHBACService',
+    HBACServiceGroup: 'IPAHBACServiceGroup',
+    HBACRuleTo: 'IPAHBACRuleTo',
+    HBACRule: 'IPAHBACRule',
     Role: 'IPARole',
     Privilege: 'IPAPrivilege',
     Permission: 'IPAPermission',
     Service: 'IPAService',
     MemberOf: 'IPAMemberOf',
     SudoRuleTo: 'IPASudoRuleTo',
-    HBACService: 'IPAHBACService',
-    HBACServiceGroup: 'IPAHBACServiceGroup',
-    HBACRuleTo: 'IPAHBACRuleTo',
-    HBACRule: 'IPAHBACRule'
+    MemberManager: 'IPAMemberManager'
 };
 
 const DirectoryObjectEntityTypes = {

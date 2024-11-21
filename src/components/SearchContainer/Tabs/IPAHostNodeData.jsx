@@ -82,46 +82,28 @@ const IPAHostNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Sessions'
+                                    property='Host Groups'
                                     target={objectid}
                                     baseQuery={
-                                        "MATCH p=(m:IPAHost {objectid: $objectid})-[r:HasSession]->(n:User) WHERE NOT n.objectid ENDS WITH '$'"
+                                        'MATCH p=(:IPAHost {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHostGroup)'
                                     }
                                     start={label}
-                                    distinct
                                 />
                                 <NodeCypherLink
-                                    property='Reachable High Value Targets'
+                                    property='Net Groups'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:IPAHost {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
+                                        'MATCH p=(:IPAHost {objectid: $objectid})-[:IPAMemberOf]->(n:IPANetGroup)'
                                     }
                                     start={label}
                                 />
-                                <NodeCypherLinkComplex
-                                    property='Sibling Objects in the Same OU'
+                                <NodeCypherLink
+                                    property='Roles'
                                     target={objectid}
-                                    countQuery={
-                                        'MATCH (o1)-[r1:Contains]->(o2:IPAHost {objectid: $objectid}) WITH o1 OPTIONAL MATCH p1=(d)-[r2:Contains*1..]->(o1) OPTIONAL MATCH p2=(o1)-[r3:Contains]->(n) WHERE n:User OR n:IPAHost RETURN count(distinct(n))'
+                                    baseQuery={
+                                        'MATCH p=(:IPAHost {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole)'
                                     }
-                                    graphQuery={
-                                        'MATCH (o1)-[r1:Contains]->(o2:IPAHost {objectid: $objectid}) WITH o1 OPTIONAL MATCH p1=(d)-[r2:Contains*1..]->(o1) OPTIONAL MATCH p2=(o1)-[r3:Contains]->(n) WHERE n:User OR n:IPAHost RETURN p1,p2'
-                                    }
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Effective Inbound GPOs'
-                                    target={objectid}
-                                    countQuery={
-                                        'MATCH (c:IPAHost {objectid: $objectid}) OPTIONAL MATCH p1 = (g1:GPO)-[r1:GPLink {enforced:true}]->(container1)-[r2:Contains*1..]->(c) OPTIONAL MATCH p2 = (g2:GPO)-[r3:GPLink {enforced:false}]->(container2)-[r4:Contains*1..]->(c) WHERE NONE (x in NODES(p2) WHERE x.blocksinheritance = true AND x:OU AND NOT (g2)-->(x)) WITH COLLECT(g1) + COLLECT(g2) AS tempVar UNWIND tempVar AS GPOs RETURN COUNT(DISTINCT(GPOs))'
-                                    }
-                                    graphQuery={
-                                        'MATCH (c:IPAHost {objectid: $objectid}) OPTIONAL MATCH p1 = (g1:GPO)-[r1:GPLink {enforced:true}]->(container1)-[r2:Contains*1..]->(c) OPTIONAL MATCH p2 = (g2:GPO)-[r3:GPLink {enforced:false}]->(container2)-[r4:Contains*1..]->(c) WHERE NONE (x in NODES(p2) WHERE x.blocksinheritance = true AND x:OU AND NOT (g2)-->(x)) RETURN p1,p2'
-                                    }
-                                />
-                                <NodeCypherNoNumberLink
-                                    target={objectid}
-                                    property='See Computer within Domain/OU Tree'
-                                    query='MATCH p = (d:Domain)-[r:Contains*1..]->(u:IPAHost {objectid: $objectid}) RETURN p'
+                                    start={label}
                                 />
                             </tbody>
                         </Table>

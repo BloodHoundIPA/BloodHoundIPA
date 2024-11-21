@@ -121,45 +121,28 @@ const IPAUserNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Sessions'
+                                    property='User Groups'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(m:Computer)-[r:HasSession]->(n:IPAUser {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Sibling Objects in the Same OU'
-                                    target={objectId}
-                                    countQuery={
-                                        'MATCH (o1)-[r1:Contains]->(o2:IPAUser {objectid: $objectid}) WITH o1 OPTIONAL MATCH p1=(d)-[r2:Contains*1..]->(o1) OPTIONAL MATCH p2=(o1)-[r3:Contains]->(n) WHERE n:IPAUser OR n:Computer RETURN count(distinct(n))'
-                                    }
-                                    graphQuery={
-                                        'MATCH (o1)-[r1:Contains]->(o2:IPAUser {objectid: $objectid}) WITH o1 OPTIONAL MATCH p1=(d)-[r2:Contains*1..]->(o1) OPTIONAL MATCH p2=(o1)-[r3:Contains]->(n) WHERE n:IPAUser OR n:Computer RETURN p1,p2'
-                                    }
-                                />
-                                <NodeCypherLink
-                                    property='Reachable High Value Targets'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH (m:IPAUser {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPAUserGroup)'
                                     }
                                     start={label}
                                 />
-                                <NodeCypherLinkComplex
-                                    property='Effective Inbound GPOs'
+                                <NodeCypherLink
+                                    property='Net Groups'
                                     target={objectId}
-                                    countQuery={
-                                        'MATCH (c:IPAUser {objectid: $objectid}) OPTIONAL MATCH p1 = (g1:GPO)-[r1:GPLink {enforced:true}]->(container1)-[r2:Contains*1..]->(c) OPTIONAL MATCH p2 = (g2:GPO)-[r3:GPLink {enforced:false}]->(container2)-[r4:Contains*1..]->(c) WHERE NONE (x in NODES(p2) WHERE x.blocksinheritance = true AND x:OU AND NOT (g2)-->(x)) WITH COLLECT(g1) + COLLECT(g2) AS tempVar UNWIND tempVar AS GPOs RETURN COUNT(DISTINCT(GPOs))'
+                                    baseQuery={
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPANetGroup)'
                                     }
-                                    graphQuery={
-                                        'MATCH (c:IPAUser {objectid: $objectid}) OPTIONAL MATCH p1 = (g1:GPO)-[r1:GPLink {enforced:true}]->(container1)-[r2:Contains*1..]->(c) OPTIONAL MATCH p2 = (g2:GPO)-[r3:GPLink {enforced:false}]->(container2)-[r4:Contains*1..]->(c) WHERE NONE (x in NODES(p2) WHERE x.blocksinheritance = true AND x:OU AND NOT (g2)-->(x)) RETURN p1,p2'
-                                    }
+                                    start={label}
                                 />
-                                <NodeCypherNoNumberLink
+                                <NodeCypherLink
+                                    property='Roles'
                                     target={objectId}
-                                    property='See user within Domain/OU Tree'
-                                    query='MATCH p = (d:Domain)-[r:Contains*1..]->(u:IPAUser {objectid: $objectid}) RETURN p'
+                                    baseQuery={
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole)'
+                                    }
+                                    start={label}
                                 />
                             </tbody>
                         </Table>

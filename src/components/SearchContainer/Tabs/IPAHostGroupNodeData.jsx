@@ -124,6 +124,14 @@ const IPAHostGroupNodeData = () => {
                                     end={label}
                                 />
                                 <NodeCypherLink
+                                    property='Member Manager'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n)-[b:IPAMemberManager]->(c:IPAHostGroup {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
                                     property='Unrolled Members'
                                     target={objectid}
                                     baseQuery={
