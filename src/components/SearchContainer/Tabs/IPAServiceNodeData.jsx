@@ -78,32 +78,10 @@ const IPAServiceNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Memberships'
+                                    property='Roles'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(:IPAService {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAServiceRule)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Allow'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAService {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAServiceRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAServiceGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAServiceRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAService {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAServiceRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAServiceGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAServiceRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Deny'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAService {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAServiceRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAServiceGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAServiceRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAService {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAServiceRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAServiceGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAServiceRule) return p1,p2'
+                                        'MATCH p=(:IPAService {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole)'
                                     }
                                     start={label}
                                 />

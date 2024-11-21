@@ -194,7 +194,8 @@ export const IPALabels = {
     Permission: 'IPAPermission',
     Service: 'IPAService',
     MemberOf: 'IPAMemberOf',
-    SudoRuleTo: 'IPASudoRuleTo'
+    SudoRuleTo: 'IPASudoRuleTo',
+    MemberManager: 'IPAMemberManager'
 };
 
 const DirectoryObjectEntityTypes = {

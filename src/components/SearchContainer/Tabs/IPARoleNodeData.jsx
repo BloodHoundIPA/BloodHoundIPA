@@ -78,32 +78,50 @@ const IPARoleNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Memberships'
+                                    property='Users'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(:IPARole {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPARoleRule)'
+                                        'MATCH p=(n:IPAUser)-[:IPAMemberOf]->(:IPARole {objectid: $objectid})'
                                     }
-                                    start={label}
+                                    end={label}
                                 />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Allow'
+                                <NodeCypherLink
+                                    property='Hosts'
                                     target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPARole {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPARoleRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPARoleGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPARoleRule) return count(p1)+count(p2)'
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHost)-[:IPAMemberOf]->(:IPARole {objectid: $objectid})'
                                     }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPARole {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPARoleRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPARoleGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPARoleRule) return p1,p2'
-                                    }
-                                    start={label}
+                                    end={label}
                                 />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Deny'
+                                <NodeCypherLink
+                                    property='User Groups'
                                     target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPARole {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPARoleRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPARoleGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPARoleRule) return count(p1)+count(p2)'
+                                    baseQuery={
+                                        'MATCH p=(n:IPAUserGroup)-[:IPAMemberOf]->(:IPARole {objectid: $objectid})'
                                     }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPARole {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPARoleRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPARoleGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPARoleRule) return p1,p2'
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Host Groups'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHostGroup)-[:IPAMemberOf]->(:IPARole {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Services'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAService)-[:IPAMemberOf]->(:IPARole {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Privileges'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPARole {objectid: $objectid})-[:IPAMemberOf]->(n:IPAPrivilege)'
                                     }
                                     start={label}
                                 />

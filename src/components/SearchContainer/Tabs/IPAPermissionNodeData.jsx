@@ -78,34 +78,12 @@ const IPAPermissionNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Memberships'
+                                    property='Privileges'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(:IPAPermission {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAPermissionRule)'
+                                        'MATCH p=(n:IPAPrivilege )-[:IPAMemberOf]->(:IPAPermission {objectid: $objectid})'
                                     }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Allow'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAPermission {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAPermissionRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAPermissionGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAPermissionRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAPermission {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAPermissionRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAPermissionGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAPermissionRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Deny'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAPermission {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAPermissionRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAPermissionGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAPermissionRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAPermission {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAPermissionRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAPermissionGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAPermissionRule) return p1,p2'
-                                    }
-                                    start={label}
+                                    end={label}
                                 />
                             </tbody>
                         </Table>
