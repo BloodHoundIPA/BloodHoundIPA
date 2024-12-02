@@ -295,6 +295,21 @@ const DatabaseDataDisplay = () => {
                             index={index}
                             label={'IPASudoRule'}
                         />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAHBACRule) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAHBACRule'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAHBACService) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAHBACService'}
+                        />
+                        <DatabaseDataLabel
+                            query={'MATCH (n:IPAHBACServiceGroup) RETURN count(n) AS count'}
+                            index={index}
+                            label={'IPAHBACServiceGroup'}
+                        />
                     </tbody>
                 </Table>
             </CollapsibleSection>

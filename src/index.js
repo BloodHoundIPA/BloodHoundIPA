@@ -202,6 +202,24 @@ global.appStore = {
                 scale: 1.5,
                 color: '#17E625',
             },
+            IPAHBACRule: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF0AE',
+                scale: 1.5,
+                color: '#9be072',
+            },
+            IPAHBACService: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF00C',
+                scale: 1.2,
+                color: '#17E625',
+            },
+            IPAHBACServiceGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uF560',
+                scale: 1.5,
+                color: '#DBE617',
+            },
             AZUser: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uf007',
