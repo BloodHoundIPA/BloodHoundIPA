@@ -83,7 +83,8 @@ const fullEdgeList = [
     'AddKeyCredentialLink',
     'DumpSMSAPassword',
     'DCSync',
-    'SyncLAPSPassword'
+    'SyncLAPSPassword',
+    'IPAHBACRuleTo'
 ];
 
 export default class AppContainer extends Component {
