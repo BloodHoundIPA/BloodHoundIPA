@@ -144,6 +144,14 @@ const IPAUserNodeData = () => {
                                     }
                                     start={label}
                                 />
+                                <NodeCypherLink
+                                    property='Permissions'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPAPermission)'
+                                    }
+                                    start={label}
+                                />
                             </tbody>
                         </Table>
                     </div>

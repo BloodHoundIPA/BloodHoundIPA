@@ -79,6 +79,14 @@ const IPAUserGroupNodeData = () => {
                                     }
                                     start={label}
                                 />
+                                <NodeCypherLink
+                                    property='Permissions'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(:IPAUserGroup {objectid: $objectid})-[:IPAMemberOf]->(n:Permissions )'
+                                    }
+                                    start={label}
+                                />
                             </tbody>
                         </Table>
                     </div>

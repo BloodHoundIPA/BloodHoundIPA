@@ -435,23 +435,23 @@ const IPAHostNodeData = () => {
                                     property='All Sudo Rule'
                                     target={objectid}
                                     countQuery={
-                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)<-[r1:IPASudoRuleTo]-(h) OPTIONAL MATCH p2=(n)<-[r2:IPASudoRuleTo]-(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
                                     }
                                     graphQuery={
-                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule) WITH h,n OPTIONAL MATCH p1=(n)<-[r1:IPASudoRuleTo]-(h) OPTIONAL MATCH p2=(n)<-[r2:IPASudoRuleTo]-(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
                                     }
-                                    end={label}
+                                    start={label}
                                 />
                                 <NodeCypherLinkComplex
                                     property='Enabled Sudo Rule'
                                     target={objectid}
                                     countQuery={
-                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)<-[r1:IPASudoRuleTo]-(h) OPTIONAL MATCH p2=(n)<-[r2:IPASudoRuleTo]-(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN count(n)'
                                     }
                                     graphQuery={
-                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)-[r1:IPASudoRuleTo]->(h) OPTIONAL MATCH p2=(n)-[r2:IPASudoRuleTo]->(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
+                                        'MATCH (h:IPAHost {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH h,n OPTIONAL MATCH p1=(n)<-[r1:IPASudoRuleTo]-(h) OPTIONAL MATCH p2=(n)<-[r2:IPASudoRuleTo]-(g1:IPAHostGroup)<-[r3:IPAMemberOf*1..]-(h) RETURN p1,p2'
                                     }
-                                    end={label}
+                                    start={label}
                                 />
                             </tbody>
                         </Table>
