@@ -45,6 +45,10 @@ import IPASudoRuleNodeData from './Tabs/IPASudoRuleNodeData';
 import IPAHBACRuleNodeData from './Tabs/IPAHBACRuleNodeData';
 import IPAHBACServiceNodeData from './Tabs/IPAHBACServiceNodeData';
 import IPAHBACServiceGroupNodeData from './Tabs/IPAHBACServiceGroupNodeData';
+import IPAPermissionNodeData from './Tabs/IPAPermissionNodeData';
+import IPAPrivilegeNodeData from './Tabs/IPAPrivilegeNodeData';
+import IPARoleNodeData from './Tabs/IPARoleNodeData';
+import IPAServiceNodeData from './Tabs/IPAServiceNodeData';
 
 
 class TabContainer extends Component {
@@ -90,6 +94,10 @@ class TabContainer extends Component {
             ipaHBACRuleVisible: false,
             ipaHBACServiceVisible: false,
             ipaHBACServiceGroupVisible: false,
+            ipaPermissionVisible: false,
+            ipaPrivilegeVisible: false,
+            ipaRoleVisible: false,
+            ipaServiceVisible: false,
             selected: 1,
         };
     }
@@ -181,7 +189,15 @@ class TabContainer extends Component {
             this._ipaHBACServiceNodeClicked();
         } else if (type === 'IPAHBACServiceGroup') {
             this._ipaHBACServiceGroupNodeClicked();
-        } 
+        } else if (type === 'IPAPermission') {
+            this._ipaPermissionNodeClicked();
+        } else if (type === 'IPAPrivilege') {
+            this._ipaPrivilegeNodeClicked();
+        } else if (type === 'IPARole') {
+            this._ipaRoleNodeClicked();
+        } else if (type === 'IPAService') {
+            this._ipaServiceNodeClicked();
+        }
     }
 
     componentDidMount() {
@@ -350,11 +366,43 @@ class TabContainer extends Component {
             selected: 2
         });
     }
-
+    
     _ipaHBACServiceGroupNodeClicked() {
         this.clearVisible()
         this.setState({
             ipaHBACServiceGroupVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaPrivilegeNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaPrivilegeVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaPermissionNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaPermissionVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaRoleNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaRoleVisible: true,
+            selected: 2
+        });
+    }
+
+    _ipaServiceNodeClicked() {
+        this.clearVisible()
+        this.setState({
+            ipaServiceVisible: true,
             selected: 2
         });
     }
@@ -569,8 +617,11 @@ class TabContainer extends Component {
                                 !this.state.ipaSudoRuleVisible &&
                                 !this.state.ipaHBACRuleVisible &&
                                 !this.state.ipaHBACServiceVisible &&
-                                !this.state.ipaHBACServiceGroupVisible
-
+                                !this.state.ipaHBACServiceGroupVisible &&
+                                !this.state.ipaPermissionVisible &&
+                                !this.state.ipaPrivilegeVisible &&
+                                !this.state.ipaRoleVisible &&
+                                !this.state.ipaServiceVisible
                             }
                         />
                         <BaseNodeData visible={this.state.baseVisible} />
@@ -625,6 +676,10 @@ class TabContainer extends Component {
                         <IPAHBACRuleNodeData visible={this.state.ipaHBACRuleVisible} />
                         <IPAHBACServiceNodeData visible={this.state.ipaHBACServiceVisible} />
                         <IPAHBACServiceGroupNodeData visible={this.state.ipaHBACServiceGroupVisible} />
+                        <IPAPermissionNodeData visible={this.state.ipaPermissionVisible} />
+                        <IPAPrivilegeNodeData visible={this.state.ipaPrivilegeVisible} />
+                        <IPARoleNodeData visible={this.state.ipaRoleVisible} />
+                        <IPAServiceNodeData visible={this.state.ipaServiceVisible} />
                     </Tab>
 
                     <Tab eventKey={3} title='Analysis'>

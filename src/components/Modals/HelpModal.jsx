@@ -81,6 +81,7 @@ import AZNodeResourceGroup from './HelpTexts/AZNodeResourceGroup/AZNodeResourceG
 import IPAMemberOf from './HelpTexts/IPAMemberOf/IPAMemberOf'; 
 import IPASudoRuleTo from './HelpTexts/IPASudoRuleTo/IPASudoRuleTo';
 import IPAHBACRuleTo from './HelpTexts/IPAHBACRuleTo/IPAHBACRuleTo';
+import IPAMemberManager from './HelpTexts/IPAMemberManager/IPAMemberManager';
 
 const HelpModal = () => {
     const [sourceName, setSourceName] = useState('');
@@ -197,6 +198,7 @@ const HelpModal = () => {
         IPAMemberOf: IPAMemberOf,
         IPASudoRuleTo: IPASudoRuleTo,
         IPAHBACRuleTo: IPAHBACRuleTo,
+        IPAMemberManager: IPAMemberManager,
     };
 
     const Component = edge in components ? components[edge] : Default;

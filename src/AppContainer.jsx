@@ -84,7 +84,10 @@ const fullEdgeList = [
     'DumpSMSAPassword',
     'DCSync',
     'SyncLAPSPassword',
-    'IPAHBACRuleTo'
+    'IPAHBACRuleTo',
+    'IPAMemberOf',
+    'IPASudoRuleTo',
+    'IPAMemberManager'
 ];
 
 export default class AppContainer extends Component {

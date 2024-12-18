@@ -72,18 +72,18 @@ const IPAUserGroupNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Sessions'
+                                    property='Roles'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p = (c:Computer)-[n:HasSession]->(u:User)-[r2:MemberOf*1..]->(g:Group {objectid: $objectid})'
+                                        'MATCH p=(:IPAUserGroup {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole )'
                                     }
-                                    end={label}
+                                    start={label}
                                 />
                                 <NodeCypherLink
-                                    property='Reachable High Value Targets'
+                                    property='Permissions'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH (m:Group {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
+                                        'MATCH p=(:IPAUserGroup {objectid: $objectid})-[:IPAMemberOf]->(n:Permissions )'
                                     }
                                     start={label}
                                 />
@@ -120,6 +120,14 @@ const IPAUserGroupNodeData = () => {
                                     target={objectid}
                                     baseQuery={
                                         'MATCH p=(n)-[b:IPAMemberOf]->(c:IPAUserGroup {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Member Manager'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n)-[b:IPAMemberManager]->(c:IPAUserGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
