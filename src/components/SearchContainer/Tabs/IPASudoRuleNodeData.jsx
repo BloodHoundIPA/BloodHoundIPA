@@ -73,7 +73,7 @@ const IPASudoRuleNodeData = () => {
                                     property='Sudo Relationship'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})-[:IPASudoRuleTo]->()'
+                                        'MATCH p=(n)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
                                     }
                                 />
                             </tbody>
