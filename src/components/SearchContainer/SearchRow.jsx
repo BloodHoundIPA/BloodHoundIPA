@@ -56,19 +56,19 @@ const SearchRow = ({ item, search }) => {
             icon.className = 'fa fa-users';
             break;
         case 'IPAHostGroup':
-            icon.className = 'fa-light fa-server';
+            icon.className = 'fa fa-server';
             break;
         case 'IPANetGroup':
-            icon.className = 'fa-light fa-network-wired';
+            icon.className = 'fa fa-network-wired';
             break;
         case 'IPASudo':
             icon.className = 'fa fa-terminal';
             break;
         case 'IPASudoGroup':
-            icon.className = 'fa-solid fa-list';
+            icon.className = 'fa fa-list';
             break;
         case 'IPASudoRule':
-            icon.className = 'fa-light fa-book';
+            icon.className = 'fa fa-book';
             break;
         case 'IPAHBACRule':
             icon.className = 'fa fa-list-check';
@@ -77,16 +77,16 @@ const SearchRow = ({ item, search }) => {
         case 'IPAHBACServiceGroup':
             icon.className = 'fa fa-check-double';
         case 'IPARole':
-            icon.className = 'fa-light fa-address-book';
+            icon.className = 'fa fa-address-book';
             break;
         case 'IPAPrivilege':
-            icon.className = 'fa-light fa-arrow-up-from-bracket';
+            icon.className = 'fa fa-arrow-up-from-bracket';
             break;
         case 'IPAPermission':
-            icon.className = 'fa-light fa-arrow-up';
+            icon.className = 'fa fa-arrow-up';
             break;
         case 'IPAService':
-            icon.className = 'fa-light fa-gear';
+            icon.className = 'fa fa-gear';
             break;
         case 'AZUser':
             icon.className = 'fa fa-user';

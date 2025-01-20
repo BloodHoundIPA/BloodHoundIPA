@@ -80,11 +80,11 @@ export function buildSearchQuery(searchterm) {
 
         let statement = `MATCH (n:${type}) WHERE n.name = $name OR n.azname=$name RETURN n LIMIT 10 UNION MATCH (n:${type}) WHERE n.name CONTAINS $name OR n.azname CONTAINS $name OR n.objectid CONTAINS $name RETURN n LIMIT 10`;
 
-        return [statement, term.toUpperCase()];
+        return [statement, term];
     } else {
         return [
             'MATCH (n:Base) WHERE n.name = $name OR n.azname=$name RETURN n LIMIT 10 UNION MATCH (n) WHERE n.name CONTAINS $name OR n.azname CONTAINS $name OR n.objectid CONTAINS $name RETURN n LIMIT 10',
-            searchterm.toUpperCase(),
+            searchterm,
         ];
     }
 }
