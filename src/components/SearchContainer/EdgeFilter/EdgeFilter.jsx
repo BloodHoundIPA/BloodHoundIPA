@@ -198,6 +198,21 @@ const EdgeFilter = ({ open }) => {
                     <EdgeFilterCheck name='AZMGAddMember' />
                     <EdgeFilterCheck name='AZMGGrantAppRoles' />
                     <EdgeFilterCheck name='AZMGGrantRole' />
+                
+                    <EdgeFilterSection
+                        title='FreeIPA'
+                        edges={[
+                            'IPAMemberOf',
+                            'IPAMemberManager',
+                            'IPAHBACRuleTo',
+                            'IPASudoRuleTo',
+                        ]}
+                        sectionName='freeipa'
+                    />
+                    <EdgeFilterCheck name='IPAMemberOf' />
+                    <EdgeFilterCheck name='IPAMemberManager' />
+                    <EdgeFilterCheck name='IPAHBACRuleTo' />
+                    <EdgeFilterCheck name='IPASudoRuleTo' />
                 </div>
             </div>
         </motion.div>
