@@ -538,6 +538,104 @@
                     "allowCollapse": true
                 }
             ]
+        },
+        {
+            "name": "Enrollment Administrator",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Enrollment Administrator"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "IT Security Specialist",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "IT Security Specialist"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "IT Specialist",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "IT Specialist"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Security Architect",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Security Architect"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Subordinate ID Selfservice User",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Subordinate ID Selfservice User"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "User Administrator",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "User Administrator"
+                    },
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "helpdesk",
+            "category": "FreeIPA - Role",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf]->(m: IPARole {name: $name}) RETURN p",
+                    "props": {
+                        "name": "helpdesk"
+                    },
+                    "allowCollapse": true
+                }
+            ]
         }
     ]
 }
