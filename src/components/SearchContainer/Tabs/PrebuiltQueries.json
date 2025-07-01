@@ -636,6 +636,525 @@
                     "allowCollapse": true
                 }
             ]
+        },
+        {
+            "name": "ADTrust Agents",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                    "name": "ADTrust Agents"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Automember Readers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                    "name": "Automember Readers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Automember Task Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                    "name": "Automember Task Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Automount Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                    "name": "Automount Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "CA Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                    "name": "CA Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Certificate Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Certificate Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Certificate Identity Mapping Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Certificate Identity Mapping Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Delegation Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Delegation Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "DNS Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "DNS Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "DNS Servers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "DNS Servers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "External IdP server Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "External IdP server Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Group Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Group Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "HBAC Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "HBAC Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Host Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Host Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Host Enrollment",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Host Enrollment"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Host Group Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Host Group Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "IPA Masters Readers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "IPA Masters Readers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Kerberos Ticket Policy Readers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Kerberos Ticket Policy Readers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Modify Group membership",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Modify Group membership"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Modify Users and Reset passwords",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Modify Users and Reset passwords"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Netgroups Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Netgroups Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Passkey Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Passkey Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "PassSync Service",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "PassSync Service"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Password Policy Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Password Policy Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Password Policy Readers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Password Policy Readers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "RBAC Readers",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "RBAC Readers"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Replication Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Replication Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "SELinux User Map Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "SELinux User Map Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Service Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Service Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Stage User Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Stage User Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Stage User Provisioning",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Stage User Provisioning"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Subordinate ID Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Subordinate ID Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Subordinate ID Selfservice Users",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Subordinate ID Selfservice Users"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Sudo Administrator",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Sudo Administrator"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "User Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "User Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Vault Administrators",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Vault Administrators"
+                    },
+                    "allowCollapse": false
+                }
+            ]
+        },
+        {
+            "name": "Write IPA Configuration",
+            "category": "FreeIPA - Privilege",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(m: IPAPrivilege {name: $name}) RETURN p",
+                    "props": {
+                        "name": "Write IPA Configuration"
+                    },
+                    "allowCollapse": false
+                }
+            ]
         }
+
     ]
 }
