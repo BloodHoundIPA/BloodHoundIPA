@@ -85,6 +85,14 @@ const IPAServiceNodeData = () => {
                                     }
                                     start={label}
                                 />
+                                <NodeCypherLink
+                                    property='Managed by'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHost)-[:IPAManagedBy]->(:IPAService {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
                             </tbody>
                         </Table>
                     </div>
