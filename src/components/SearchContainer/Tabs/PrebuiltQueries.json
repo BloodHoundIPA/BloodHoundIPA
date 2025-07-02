@@ -1154,6 +1154,17 @@
                     "allowCollapse": false
                 }
             ]
+        },
+        {
+            "name": "Services",
+            "category": "FreeIPA - Service",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAService) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
         }
 
     ]
