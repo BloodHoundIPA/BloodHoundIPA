@@ -1165,6 +1165,39 @@
                     "allowCollapse": true
                 }
             ]
+        },
+        {
+            "name": "User Groups",
+            "category": "FreeIPA - Group",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAUserGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Host Groups",
+            "category": "FreeIPA - Group",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAHostGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Network Groups",
+            "category": "FreeIPA - Group",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPANetGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
         }
 
     ]
