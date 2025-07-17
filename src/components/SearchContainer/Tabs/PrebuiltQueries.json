@@ -538,6 +538,28 @@
                     "allowCollapse": true
                 }
             ]
+        },
+        {
+            "name": "Find all IPAUsers, IPAHosts and IPAServices where userPassword is not null",
+            "category": "IPA Domain Recon",
+            "querylist": [
+                {
+                    "final": true,
+                    "query": "MATCH (u) WHERE (u:IPAUser OR u:IPAHost OR u:IPAService) AND u.userPassword IS NOT NULL return u",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Find all IPAUsers, IPAHosts and IPAServices with allow_all HBAC rules",
+            "category": "IPA Domain Recon",
+            "querylist": [
+                {
+                    "final": true,
+                    "query": "MATCH p=(n)-[:IPAMemberOf*1..]->(r:IPAHBACRule {cn: \"allow_all\"}) WHERE n:IPAUser OR n:IPAHost OR n:IPAHBACService RETURN p",
+                    "allowCollapse": true
+                }
+            ]
         }
     ]
 }

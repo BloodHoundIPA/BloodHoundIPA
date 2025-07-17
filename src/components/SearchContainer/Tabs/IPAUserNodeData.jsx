@@ -54,23 +54,10 @@ const IPAUserNodeData = () => {
     const displayMap = {
         displayname: 'Display Name',
         objectid: 'Object ID',
-        pwdlastset: 'Password Last Changed',
-        lastlogon: 'Last Logon',
-        lastlogontimestamp: 'Last Logon (Replicated)',
-        enabled: 'Enabled',
         email: 'Email',
-        title: 'Title',
         homedirectory: 'Home Directory',
-        description: 'Description',
         userpassword: 'User Password',
-        admincount: 'AdminCount',
         owned: 'Compromised',
-        pwdneverexpires: 'Password Never Expires',
-        sensitive: 'Cannot Be Delegated',
-        dontreqpreauth: 'ASREP Roastable',
-        serviceprincipalnames: 'Service Principal Names',
-        allowedtodelegate: 'Allowed To Delegate',
-        sidhistory: 'SID History',
         
         cn: "CN",
         dn: 'DN',
@@ -121,6 +108,14 @@ const IPAUserNodeData = () => {
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
+                                    property='Reachable High Value Targets'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH (m:IPAUser {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NOT m=n'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
                                     property='User Groups'
                                     target={objectId}
                                     baseQuery={
@@ -149,6 +144,22 @@ const IPAUserNodeData = () => {
                                     target={objectId}
                                     baseQuery={
                                         'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPAPermission)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='HBAC rules'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHBACRule)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='Sudo rules'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n:IPASudoRule)'
                                     }
                                     start={label}
                                 />
@@ -184,7 +195,7 @@ const IPAUserNodeData = () => {
                                     property='First Degree Group Memberships'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH (m:IPAUser {objectid: $objectid}), (n:Group), p=(m)-[:MemberOf]->(n)'
+                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[:IPAMemberOf]->(n) WHERE n:IPAUserGroup OR n:IPANetGroup'
                                     }
                                     start={label}
                                 />
@@ -192,121 +203,7 @@ const IPAUserNodeData = () => {
                                     property='Unrolled Group Membership'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p = (m:IPAUser {objectid: $objectid})-[r:MemberOf*1..]->(n:Group)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Foreign Group Membership'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH (m:IPAUser {objectid: $objectid}) MATCH (n:Group) WHERE NOT m.domain=n.domain MATCH p=(m)-[r:MemberOf*1..]->(n)'
-                                    }
-                                    start={label}
-                                    domain={domain}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header={'LOCAL ADMIN RIGHTS'}>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree Local Admin'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r:AdminTo]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated Local Admin Rights'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r1:MemberOf*1..]->(g:Group)-[r2:AdminTo]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodePlayCypherLink
-                                    property='Derivative Local Admin Rights'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=shortestPath((m:IPAUser {objectid: $objectid})-[r:HasSession|AdminTo|MemberOf*1..]->(n:Computer))'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header={'EXECUTION RIGHTS'}>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree RDP Privileges'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r:CanRDP]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated RDP Privileges'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r1:MemberOf*1..]->(g:Group)-[r2:CanRDP]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='First Degree DCOM Privileges'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r:ExecuteDCOM]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated DCOM Privileges'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r1:MemberOf*1..]->(g:Group)-[r2:ExecuteDCOM]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='SQL Admin Rights'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r:SQLAdmin]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Constrained Delegation Privileges'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAUser {objectid: $objectid})-[r:AllowedToDelegate]->(n:Computer)'
+                                        'MATCH p = (m:IPAUser {objectid: $objectid})-[r:IPAMemberOf*1..]->(n) WHERE n:IPAUserGroup OR n:IPANetGroup'
                                     }
                                     start={label}
                                     distinct
@@ -336,7 +233,7 @@ const IPAUserNodeData = () => {
                                     property='Group Delegated Object Control'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(u:IPAUser {objectid: $objectid})-[r1:MemberOf*1..]->(g:Group)-[r2]->(n) WHERE r2.isacl=true'
+                                        'MATCH p=(u:IPAUser {objectid: $objectid})-[:IPAMemberOf*1..]->(g)-[r2]->(n) WHERE (g:IPAUserGroup OR g:IPANetGroup) AND r2.isacl=true'
                                     }
                                     start={label}
                                     distinct
@@ -345,11 +242,12 @@ const IPAUserNodeData = () => {
                                     property='Transitive Object Control'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid MATCH p=shortestPath((u:IPAUser {objectid: $objectid})-[r1:MemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(n))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid MATCH p=shortestPath((u:IPAUser {objectid: $objectid})-[r1:IPAMemberOf|IPAMemberManager|IPASudoRuleTo|IPAHBACRuleTo*1..]->(n))'
                                     }
                                     start={label}
                                     distinct
                                 />
+
                             </tbody>
                         </Table>
                     </div>
@@ -375,7 +273,7 @@ const IPAUserNodeData = () => {
                                     property='Unrolled Object Controllers'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH p=(n)-[r:MemberOf*1..]->(g:Group)-[r1:AddMember|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(u:IPAUser {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = u.objectid) AND NOT n.objectid = u.objectid'
+                                        'MATCH p=(n)-[r:IPAMemberOf*1..]->(g:IPAUserGroup)-[r1:IPAMemberOf|IPAMemberManager|IPASudoRuleTo|IPAHBACRuleTo]->(u:IPAUser {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = u.objectid) AND NOT n.objectid = u.objectid'
                                     }
                                     end={label}
                                     distinct
@@ -384,7 +282,7 @@ const IPAUserNodeData = () => {
                                     property='Transitive Object Controllers'
                                     target={objectId}
                                     baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid MATCH p = shortestPath((n)-[r1:MemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner*1..]->(u1:IPAUser {objectid: $objectid}))'
+                                        'MATCH (n) WHERE NOT n.objectid=$objectid MATCH p = shortestPath((n)-[r1:IPAMemberOf|IPAMemberManager|IPASudoRuleTo|IPAHBACRuleTo*1..]->(u1:IPAUser {objectid: $objectid}))'
                                     }
                                     end={label}
                                     distinct
@@ -394,39 +292,6 @@ const IPAUserNodeData = () => {
                     </div>
                 </CollapsibleSection>
 
-                <hr></hr>
-
-                <CollapsibleSection header={'SUDO RULE'}>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLinkComplex
-                                    property='All Sudo Rule'
-                                    target={objectId}
-                                    countQuery={
-                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
-                                    }
-                                    graphQuery={
-                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Enabled Sudo Rule'
-                                    target={objectId}
-                                    countQuery={
-                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
-                                    }
-                                    graphQuery={
-                                        'MATCH (u:IPAUser {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH u,n OPTIONAL MATCH p1=(u)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(u)-[r2:IPAMemberOf*1..]->(g1:IPAUserGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
 
                 {/* <Notes objectid={objectId} type={'IPAUser'} />
                 <NodeGallery
