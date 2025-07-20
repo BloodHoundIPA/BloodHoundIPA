@@ -1,61 +1,82 @@
-# Latest Version of BloodHound Community Edition is Released
+<p align="center">
+  <img src="./src/img/logo_bloodhoundipa.png" alt="BloodHoundIPA" width="100%" />
+</p>
 
-For the latest version of BloodHound you may follow [this link to the BloodHound Community Edition repository](https://github.com/SpecterOps/BloodHound).
+# BloodHoundIPA
 
-## Deprecation Notice
+This README is also available in: [Русском](./README.ru.md)
 
-This repository will be archived in the near future.
+Extension of BloodHound to visualize privilege relationships in FreeIPA environments.
 
-<hr />
+# Getting Started with BloodHoundIPA
 
-[![Build](https://github.com/BloodHoundAD/BloodHound/actions/workflows/build.yml/badge.svg)](https://github.com/BloodHoundAD/BloodHound/actions/workflows/build.yml)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/BloodHoundAD/BloodHound)](https://github.com/BloodHoundAD/BloodHound/releases/latest)
-![GitHub all releases](https://img.shields.io/github/downloads/BloodHoundAD/BloodHound/total)
+To get started with BloodHound, check out the [original BloodHound docs.](https://bloodhound.readthedocs.io/en/latest/index.html)
 
-# Getting Started with BloodHound
+# About BloodHoundIPA
 
-To get started with BloodHound, check out the [BloodHound docs.](https://bloodhound.readthedocs.io/en/latest/index.html)
+BloodHoundIPA is a fork of the original [BloodHound](https://github.com/BloodHoundAD/BloodHound) project.  
+It retains full functionality for Active Directory and Azure environments, while adding native support for FreeIPA.
 
-# About BloodHound
+The goal is to bring the same powerful graph-based privilege analysis to FreeIPA-based infrastructures,  
+including support for Sudo, HBAC, Roles, and custom FreeIPA entities.
 
-BloodHound is a single page Javascript web application, built on top of [Linkurious](http://linkurio.us/), compiled with [Electron](http://electron.atom.io/), with a [Neo4j](https://neo4j.com/) database fed by a C# data collector.
+BloodHoundIPA uses graph theory to reveal hidden and often unintended privilege relationships  
+within FreeIPA, Active Directory, or Azure environments.
 
-BloodHound uses graph theory to reveal the hidden and often unintended relationships within an Active Directory or Azure environment. Attackers can use BloodHound to easily identify highly complex attack paths that would otherwise be impossible to quickly identify. Defenders can use BloodHound to identify and eliminate those same attack paths. Both blue and red teams can use BloodHound to easily gain a deeper understanding of privilege relationships in an Active Directory or Azure environment.
+Red Teams can use BloodHoundIPA to identify complex attack paths across nested delegation models.  
+Blue Teams can use it to map and harden FreeIPA RBAC, Sudo chains, and access control rules.  
+It empowers both offensive and defensive teams to gain deeper insight into identity relationships in hybrid infrastructures.
 
-BloodHound was created by [@_wald0](https://www.twitter.com/_wald0), [@CptJesus](https://twitter.com/CptJesus), and [@harmj0y](https://twitter.com/harmj0y).
+## What's new in BloodHoundIPA
 
-BloodHound is maintained by the [BloodHound Enterprise](https://bloodhoundenterprise.io/) team.
+### Node Types
 
-# About BloodHound Enterprise
+- `IPAUser`
+- `IPAHost`
+- `IPAHostGroup`
+- `IPANetGroup`
+- `IPASudo`
+- `IPASudoGroup`
+- `IPASudoRule`
+- `IPARole`
+- `IPAPrivilege`
+- `IPAPermission`
+- `IPAHBACRule`
+- `IPAHBACService`
+- `IPAHBACServiceGroup`
 
-[BloodHound Enterprise](https://bloodhoundenterprise.io/) is an Attack Path Management solution that continuously maps and quantifies Active Directory Attack Paths. You can remove millions, even billions of Attack Paths within your existing architecture and eliminate the attacker’s easiest, most reliable, and most attractive techniques.
+### Edge Types
 
-# Downloading BloodHound Binaries
-Pre-Compiled BloodHound binaries can be found [here](https://github.com/BloodHoundAD/BloodHound/releases). 
+- `IPAMemberOf`
+- `IPAMemberManager`
+- `IPASudoRuleTo`
+- `IPAHBACRuleTo`
 
-The rolling release will always be updated to the most recent source. Tagged releases are considered "stable" but will likely not have new features or fixes.
+# Collectors
+
+- [BloodyIPA](https://github.com/BloodHoundIPA/BloodyIPA)
+
+# Downloading BloodHoundIPA Binaries
+
+Prebuilt binaries will be published in the [Releases](https://github.com/BloodHoundIPA/BloodHoundIPA/releases) section soon.
 
 # Creating example data
 
-A sample database generator can be found [here](https://github.com/BloodHoundAD/BloodHound-Tools/tree/master/DBCreator)
+You can create your own example FreeIPA environment using [BadBlood](https://github.com/Levatein/BadIPA).
 
-You can create your own example Active Directory environment using [BadBlood](https://github.com/davidprowe/BadBlood).
+# Credits
+
+Huge thanks to the original creators of BloodHound — [@_wald0](https://www.twitter.com/_wald0), [@CptJesus](https://twitter.com/CptJesus) and [@harmj0y](https://twitter.com/harmj0y) — for laying the foundation for privilege graphing in Active Directory.
+
+FreeIPA adaptation and development by:
+
+- [@Name-users](https://github.com/Name-users)
+- [@levatein](https://github.com/levatein)
+- [@DrieVlad](https://github.com/DrieVlad)
 
 # License
 
-BloodHound uses graph theory to reveal hidden relationships and
-attack paths in an Active Directory environment.
-Copyright (C) 2016-2023 Specter Ops Inc.
+BloodHoundIPA is distributed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) license,  
+inherited from the original [BloodHound](https://github.com/BloodHoundAD/BloodHound) project by Specter Ops.  
+See the full license text in the [LICENSE](./LICENSE) file.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
