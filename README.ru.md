@@ -24,6 +24,9 @@ BloodHoundIPA — это форк оригинального проекта [Blo
 
 ### Типы вершин
 
+- `IPABase`
+- `IPAService`
+- `IPAUserGroup`
 - `IPAUser`
 - `IPAHost`
 - `IPAHostGroup`
@@ -63,9 +66,9 @@ BloodHoundIPA — это форк оригинального проекта [Blo
 
 Адаптацию под FreeIPA и дальнейшую разработку выполнили:
 
-- [@Name-users](https://github.com/Name-users)
-- [@levatein](https://github.com/levatein)
 - [@DrieVlad](https://github.com/DrieVlad)
+- [@levatein](https://github.com/levatein)
+- [@Name-users](https://github.com/Name-users)
 
 # Лицензия
 

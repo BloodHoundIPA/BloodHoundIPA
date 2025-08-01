@@ -31,6 +31,9 @@ It empowers both offensive and defensive teams to gain deeper insight into ident
 
 ### Node Types
 
+- `IPABase`
+- `IPAService`
+- `IPAUserGroup`
 - `IPAUser`
 - `IPAHost`
 - `IPAHostGroup`
@@ -44,6 +47,7 @@ It empowers both offensive and defensive teams to gain deeper insight into ident
 - `IPAHBACRule`
 - `IPAHBACService`
 - `IPAHBACServiceGroup`
+
 
 ### Edge Types
 
@@ -70,9 +74,10 @@ Huge thanks to the original creators of BloodHound — [@_wald0](https://www.twi
 
 FreeIPA adaptation and development by:
 
-- [@Name-users](https://github.com/Name-users)
-- [@levatein](https://github.com/levatein)
 - [@DrieVlad](https://github.com/DrieVlad)
+- [@levatein](https://github.com/levatein)
+- [@Name-users](https://github.com/Name-users)
+
 
 # License
 
