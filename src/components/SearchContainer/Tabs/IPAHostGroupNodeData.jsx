@@ -66,34 +66,6 @@ const IPAHostGroupNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectid}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Sessions'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (c:Computer)-[n:HasSession]->(u:User)-[r2:MemberOf*1..]->(g:Group {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                />
-                                <NodeCypherLink
-                                    property='Reachable High Value Targets'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH (m:Group {objectid: $objectid}),(n {highvalue:true}),p=shortestPath((m)-[r*1..]->(n)) WHERE NONE (r IN relationships(p) WHERE type(r)= "GetChanges") AND NONE (r in relationships(p) WHERE type(r)="GetChangesAll") AND NOT m=n'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -110,283 +82,118 @@ const IPAHostGroupNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='GROUP MEMBERS'>
+                <CollapsibleSection header='MEMBER'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Direct Members'
+                                    property='Hosts'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[b:IPAMemberOf]->(c:IPAHostGroup {objectid: $objectid})'
+                                        'MATCH p=(n:IPAHost)-[r:IPAMemberOf]->(g:IPAHostGroup {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
                                 <NodeCypherLink
-                                    property='Member Manager'
+                                    property='Host Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHostGroup)-[r:IPAMemberOf]->(g:IPAHostGroup {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Host Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf]->(n:IPAHostGroup)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='Network Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf]->(n:IPANetGroup)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='HBAC Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[:IPAMemberOf*0..]->(:IPAHostGroup)-[r:IPAHBACRuleTo]->(n:IPAHBACRule) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[:IPAMemberOf*0..]->(:IPAHostGroup)-[r:IPAHBACRuleTo]->(n:IPAHBACRule) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled HBAC Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPAHBACRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAHostGroup)-[:IPAHBACRuleTo]->(n) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPAHBACRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAHostGroup)-[:IPAHBACRuleTo]->(n) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Sudo Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[:IPAMemberOf*0..]->(:IPAHostGroup)-[r:IPASudoRuleTo]->(n:IPASudoRule) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH p=(g:IPAHostGroup {objectid: $objectid})-[:IPAMemberOf*0..]->(:IPAHostGroup)-[r:IPASudoRuleTo]->(n:IPASudoRule) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled Sudo Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAHostGroup)-[:IPASudoRuleTo]->(n) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAHostGroup)-[:IPASudoRuleTo]->(n) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER MANAGERS'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Users and User Groups'
                                     target={objectid}
                                     baseQuery={
                                         'MATCH p=(n)-[b:IPAMemberManager]->(c:IPAHostGroup {objectid: $objectid})'
                                     }
                                     end={label}
-                                />
-                                <NodeCypherLink
-                                    property='Unrolled Members'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf*1..]->(g:IPAHostGroup {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Foreign Members'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g:IPAHostGroup {objectid: $objectid}) WHERE NOT g.domain = n.domain'
-                                    }
-                                    end={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header='Group Membership'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree Group Membership'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(g1:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf]->(n:IPAHostGroup)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Unrolled Member Of'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (g1:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf*1..]->(n:IPAHostGroup)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Foreign Group Membership'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH (m:IPAHostGroup {objectid: $objectid}) MATCH (n:IPAHostGroup) WHERE NOT m.domain=n.domain MATCH p=(m)-[r:IPAMemberOf*1..]->(n)'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header='LOCAL ADMIN RIGHTS'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree Local Admin'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAHostGroup {objectid: $objectid})-[r:AdminTo]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-
-                                <NodeCypherLink
-                                    property='Group Delegated Local Admin Rights'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (g1:IPAHostGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAHostGroup)-[r2:AdminTo]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-
-                                <NodePlayCypherLink
-                                    property='Derivative Local Admin Rights'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = shortestPath((g:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf|AdminTo|HasSession*1..]->(n:Computer))'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header='EXECUTION RIGHTS'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree RDP Privileges'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAHostGroup {objectid: $objectid})-[r:CanRDP]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated RDP Privileges'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAHostGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAHostGroup)-[r2:CanRDP]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='First Degree DCOM Privileges'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAHostGroup {objectid: $objectid})-[r:ExecuteDCOM]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated DCOM Privileges'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(m:IPAHostGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g:IPAHostGroup)-[r2:ExecuteDCOM]->(n:Computer)'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header='OUTBOUND OBJECT CONTROL'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='First Degree Object Control'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (g:IPAHostGroup {objectid: $objectid})-[r]->(n) WHERE r.isacl=true'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Group Delegated Object Control'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (g1:IPAHostGroup {objectid: $objectid})-[r1:IPAMemberOf*1..]->(g2:IPAHostGroup)-[r2]->(n) WHERE r2.isacl=true'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                                <NodePlayCypherLink
-                                    property='Transitive Object Control'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((g:IPAHostGroup {objectid: $objectid})-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(n))'
-                                    }
-                                    start={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header='INBOUND CONTROL RIGHTS'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Explicit Object Controllers'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (n)-[r:AddMember|AddSelf|WriteSPN|AddKeyCredentialLink|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns]->(g:IPAHostGroup {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                    distinct
-                                />
-                                <NodeCypherLink
-                                    property='Unrolled Object Controllers'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p = (n)-[r:IPAMemberOf*1..]->(g1:IPAHostGroup)-[r1]->(g2:IPAHostGroup {objectid: $objectid}) WITH LENGTH(p) as pathLength, p, n WHERE NONE (x in NODES(p)[1..(pathLength-1)] WHERE x.objectid = g2.objectid) AND NOT n.objectid = g2.objectid AND r1.isacl=true'
-                                    }
-                                    end={label}
-                                    distinct
-                                />
-                                <NodePlayCypherLink
-                                    property='Transitive Object Controllers'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH (n) WHERE NOT n.objectid=$objectid WITH n MATCH p = shortestPath((n)-[r:IPAMemberOf|AddSelf|WriteSPN|AddKeyCredentialLink|AddMember|AllExtendedRights|ForceChangePassword|GenericAll|GenericWrite|WriteDacl|WriteOwner|Owns*1..]->(g:IPAHostGroup {objectid: $objectid}))'
-                                    }
-                                    end={label}
-                                    distinct
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
-                <CollapsibleSection header={'SUDO RULE'}>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLinkComplex
-                                    property='All Sudo Rule'
-                                    target={objectid}
-                                    countQuery={
-                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAHostGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
-                                    }
-                                    graphQuery={
-                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAHostGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Enabled Sudo Rule'
-                                    target={objectid}
-                                    countQuery={
-                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAHostGroup)-[r3:IPASudoRuleTo]->(n) RETURN count(n)'
-                                    }
-                                    graphQuery={
-                                        'MATCH (g:IPAHostGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n OPTIONAL MATCH p1=(g)-[r1:IPASudoRuleTo]->(n) OPTIONAL MATCH p2=(g)-[r2:IPAMemberOf*1..]->(g1:IPAHostGroup)-[r3:IPASudoRuleTo]->(n) RETURN p1,p2'
-                                    }
-                                    start={label}
                                 />
                             </tbody>
                         </Table>
