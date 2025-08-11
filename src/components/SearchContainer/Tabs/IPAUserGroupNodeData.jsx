@@ -159,6 +159,17 @@ const IPAUserGroupNodeData = () => {
                                     start={label}
                                 />
                                 <NodeCypherLinkComplex
+                                    property='Enabled HBAC Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPAHBACRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAUserGroup)-[:IPAHBACRuleTo]->(n) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPAHBACRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAUserGroup)-[:IPAHBACRuleTo]->(n) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
                                     property='Sudo Rules'
                                     target={objectid}
                                     countQuery={
@@ -166,6 +177,17 @@ const IPAUserGroupNodeData = () => {
                                     }
                                     graphQuery={
                                         'MATCH p=(g:IPAUserGroup {objectid: $objectid})-[:IPAMemberOf*0..]->(:IPAUserGroup)-[r:IPASudoRuleTo]->(n:IPASudoRule) RETURN p'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Enabled Sudo Rules'
+                                    target={objectid}
+                                    countQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAUserGroup)-[:IPASudoRuleTo]->(n) RETURN count(DISTINCT n.objectid)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (g:IPAUserGroup {objectid: $objectid}) MATCH (n:IPASudoRule {ipaenabledflag: true}) WITH g,n MATCH p=(g)-[:IPAMemberOf*0..]->(:IPAUserGroup)-[:IPASudoRuleTo]->(n) RETURN p'
                                     }
                                     start={label}
                                 />
