@@ -72,48 +72,6 @@ const IPASudoNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectId}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Memberships'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(:IPASudo {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPASudoRule)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Allow'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPASudo {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPASudoRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPASudoRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPASudo {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPASudoRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPASudoRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Deny'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPASudo {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPASudoRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPASudoRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPASudo {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPASudoRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPASudoRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -129,6 +87,46 @@ const IPASudoNodeData = () => {
                 />
 
                 <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Sudo Groups'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPASudo {objectid: $objectid})-[:IPAMemberOf]->(n:IPASudoGroup)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Allow Sudo Rules'
+                                    target={objectId}
+                                    countQuery={
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) RETURN p1,p2'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLinkComplex
+                                    property='Deny Sudo Rules'
+                                    target={objectId}
+                                    countQuery={
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
+                                    }
+                                    graphQuery={
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) RETURN p1,p2'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
 
                 {/* <Notes objectid={objectId} type={'IPASudo'} />
                 <NodeGallery
