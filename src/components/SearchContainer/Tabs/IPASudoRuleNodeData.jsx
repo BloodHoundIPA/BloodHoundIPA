@@ -64,25 +64,6 @@ const IPASudoRuleNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectid}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>                
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Sudo Relationship'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(n)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
-                                    }
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -99,36 +80,81 @@ const IPASudoRuleNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='GROUP MEMBERS'>
+                <CollapsibleSection header='MEMBER'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Direct Members All'
+                                    property='Users'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[b:IPAMemberOf]->(c:IPASudoRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAUser)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
                                 <NodeCypherLink
-                                    property='Direct Members Allow'
+                                    property='User Groups'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf {allow: true}]->(g:IPASudoRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAUserGroup)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
                                     }
                                     end={label}
-                                    distinct
                                 />
                                 <NodeCypherLink
-                                    property='Direct Members Deny'
+                                    property='Hosts'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf {allow: false}]->(g:IPASudoRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAHost)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
                                     }
                                     end={label}
-                                    distinct
+                                />
+                                <NodeCypherLink
+                                    property='Host Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHostGroup)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Allow Sudo Commands'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPASudo)-[r:IPAMemberOf {allow: true}]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Deny Sudo Commands'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPASudo)-[r:IPAMemberOf {allow: false}]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Allow Sudo Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPASudoGroup)-[r:IPAMemberOf {allow: true}]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='Deny Sudo Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPASudoGroup)-[r:IPAMemberOf {allow: false}]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='All Relationships'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n)-[r:IPASudoRuleTo]->(g:IPASudoRule {objectid: $objectid})'
+                                    }
                                 />
                             </tbody>
                         </Table>
