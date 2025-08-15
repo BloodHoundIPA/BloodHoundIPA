@@ -72,48 +72,6 @@ const IPAHBACServiceNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectId}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Memberships'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(:IPAHBACService {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Allow'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAHBACService {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAHBACRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAHBACServiceGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAHBACRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAHBACService {objectid: $objectid})-[r1:IPAMemberOf {allow: true}]->(n1:IPAHBACRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAHBACServiceGroup)-[r3:IPAMemberOf {allow: true}]->(n2:IPAHBACRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLinkComplex
-                                    property='Memberships Deny'
-                                    target={objectId}
-                                    countQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAHBACService {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAHBACRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAHBACServiceGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAHBACRule) return count(p1)+count(p2)'
-                                    }
-                                    graphQuery={
-                                        'OPTIONAL MATCH p1=(s1:IPAHBACService {objectid: $objectid})-[r1:IPAMemberOf {allow: false}]->(n1:IPAHBACRule) OPTIONAL MATCH p2=(s1)-[r2:IPAMemberOf]->(g2:IPAHBACServiceGroup)-[r3:IPAMemberOf {allow: false}]->(n2:IPAHBACRule) return p1,p2'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -129,6 +87,40 @@ const IPAHBACServiceNodeData = () => {
                 />
 
                 <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='HBAC Groups'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAHBACService {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHBACServiceGroup)'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='Enabled HBAC Rules'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAHBACService {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=true'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='Disabled HBAC Rules'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAHBACService {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=false'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>                
 
                 {/* <Notes objectid={objectId} type={'IPAHBACService'} />
                 <NodeGallery

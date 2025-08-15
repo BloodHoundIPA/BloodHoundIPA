@@ -65,50 +65,6 @@ const IPAHBACServiceGroupNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectid}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Direct Members'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(n)-[:IPAMemberOf]->(:IPAHBACServiceGroup {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                />
-                                <NodeCypherLink
-                                    property='HBAC Rule Membership'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHBACRule)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLink
-                                    property='HBAC Rule Membership Allow'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf {allow: true}]->(n:IPAHBACRule)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLink
-                                    property='HBAC Rule Membership Deny'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf {allow: false}]->(n:IPAHBACRule)'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -122,6 +78,54 @@ const IPAHBACServiceGroupNodeData = () => {
                     properties={nodeProps}
                     label={label}
                 />
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='HBAC Services'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHBACService)-[r:IPAMemberOf]->(g:IPAHBACServiceGroup {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Enabled HBAC Rules'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=true'
+                                    }
+                                    start={label}
+                                />
+                                <NodeCypherLink
+                                    property='Disabled HBAC Rules'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=false'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
 
                 {/*  <Notes objectid={objectid} type='Group' />
                  <NodeGallery
