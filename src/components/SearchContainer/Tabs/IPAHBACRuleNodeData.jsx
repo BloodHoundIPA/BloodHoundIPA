@@ -64,25 +64,6 @@ const IPAHBACRuleNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectid}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>                
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='HBAC Relationship'
-                                    target={objectid}
-                                    baseQuery={
-                                        'MATCH p=(n)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})-[:IPAHBACRuleTo]->()'
-                                    }
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -99,36 +80,65 @@ const IPAHBACRuleNodeData = () => {
 
                 <hr></hr>
 
-                <CollapsibleSection header='GROUP MEMBERS'>
+                <CollapsibleSection header='MEMBER'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
                             <tbody className='searchable'>
                                 <NodeCypherLink
-                                    property='Direct Members All'
+                                    property='Users'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(n)-[b:IPAMemberOf]->(c:IPAHBACRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAUser)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})'
                                     }
                                     end={label}
                                 />
                                 <NodeCypherLink
-                                    property='Direct Members Allow'
+                                    property='User Groups'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf {allow: true}]->(g:IPAHBACRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAUserGroup)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})'
                                     }
                                     end={label}
-                                    distinct
                                 />
                                 <NodeCypherLink
-                                    property='Direct Members Deny'
+                                    property='Hosts'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p =(n)-[r:IPAMemberOf {allow: false}]->(g:IPAHBACRule {objectid: $objectid})'
+                                        'MATCH p=(n:IPAHost)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})'
                                     }
                                     end={label}
-                                    distinct
+                                />
+                                <NodeCypherLink
+                                    property='Host Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHostGroup)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='HBAC Services'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHBACService)-[r:IPAMemberOf]->(g:IPAHBACRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='HBAC Service Groups'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHBACServiceGroup)-[r:IPAMemberOf]->(g:IPAHBACRule {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                                <NodeCypherLink
+                                    property='All Relationships'
+                                    target={objectid}
+                                    baseQuery={
+                                        'MATCH p=(n)-[r:IPAHBACRuleTo]->(g:IPAHBACRule {objectid: $objectid})'
+                                    }
                                 />
                             </tbody>
                         </Table>
