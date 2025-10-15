@@ -38,7 +38,21 @@ const IngestFuncMap = {
     gpos: NewIngestion.buildGpoJsonNew,
     containers: NewIngestion.buildContainerJsonNew,
     azure: NewIngestion.convertAzureData,
-    freeipa: NewIngestion.convertFreeIPAData,
+    freeipa_user: NewIngestion.buildIPAUserJsonNew,
+    freeipa_host: NewIngestion.buildIPAHostJsonNew,
+    freeipa_group: NewIngestion.buildIPAUserGroupJsonNew,
+    freeipa_hostgroup: NewIngestion.buildIPAHostGroupJsonNew,
+    freeipa_netgroup: NewIngestion.buildIPANetGroupJsonNew,
+    freeipa_hbacrule: NewIngestion.buildIPAHBACRuleJsonNew,
+    freeipa_hbacsvcgroup: NewIngestion.buildIPAHBACServiceGroupJsonNew,
+    freeipa_hbacsvc: NewIngestion.buildIPAHBACServiceJsonNew,
+    freeipa_permission: NewIngestion.buildIPAPermissionJsonNew,
+    freeipa_privilege: NewIngestion.buildIPAPrivilegeJsonNew,
+    freeipa_role: NewIngestion.buildIPARoleJsonNew,
+    freeipa_service: NewIngestion.buildIPAServiceJsonNew,
+    freeipa_sudocmdgroup: NewIngestion.buildIPASudoGroupJsonNew,
+    freeipa_sudocmd: NewIngestion.buildIPASudoJsonNew,
+    freeipa_sudorule: NewIngestion.buildIPASudoRuleJsonNew
 };
 
 const MenuContainer = () => {
