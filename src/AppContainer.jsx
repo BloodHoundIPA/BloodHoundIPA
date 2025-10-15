@@ -87,7 +87,8 @@ const fullEdgeList = [
     'IPAHBACRuleTo',
     'IPAMemberOf',
     'IPASudoRuleTo',
-    'IPAMemberManager'
+    'IPAMemberManager',
+    'IPAManagedBy'
 ];
 
 export default class AppContainer extends Component {

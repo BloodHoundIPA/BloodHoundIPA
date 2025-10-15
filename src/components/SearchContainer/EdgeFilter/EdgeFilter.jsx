@@ -204,6 +204,7 @@ const EdgeFilter = ({ open }) => {
                         edges={[
                             'IPAMemberOf',
                             'IPAMemberManager',
+                            'IPAManagedBy',
                             'IPAHBACRuleTo',
                             'IPASudoRuleTo',
                         ]}
@@ -211,6 +212,7 @@ const EdgeFilter = ({ open }) => {
                     />
                     <EdgeFilterCheck name='IPAMemberOf' />
                     <EdgeFilterCheck name='IPAMemberManager' />
+                    <EdgeFilterCheck name='IPAManagedBy' />
                     <EdgeFilterCheck name='IPAHBACRuleTo' />
                     <EdgeFilterCheck name='IPASudoRuleTo' />
                 </div>

@@ -82,6 +82,7 @@ import IPAMemberOf from './HelpTexts/IPAMemberOf/IPAMemberOf';
 import IPASudoRuleTo from './HelpTexts/IPASudoRuleTo/IPASudoRuleTo';
 import IPAHBACRuleTo from './HelpTexts/IPAHBACRuleTo/IPAHBACRuleTo';
 import IPAMemberManager from './HelpTexts/IPAMemberManager/IPAMemberManager';
+import IPAManagedBy from './HelpTexts/IPAManagedBy/IPAManagedBy'
 
 const HelpModal = () => {
     const [sourceName, setSourceName] = useState('');
@@ -199,6 +200,7 @@ const HelpModal = () => {
         IPASudoRuleTo: IPASudoRuleTo,
         IPAHBACRuleTo: IPAHBACRuleTo,
         IPAMemberManager: IPAMemberManager,
+        IPAManagedBy: IPAManagedBy,
     };
 
     const Component = edge in components ? components[edge] : Default;
