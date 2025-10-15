@@ -936,132 +936,136 @@ export function buildDomainJsonNew(chunk) {
  * @param {Array.<IPABase>} chunk
  * @return {{}}
  */
-export function convertFreeIPAData(chunk) {
+export function buildIPAUserJsonNew(chunk) {
     let queries = {};
-    let ipa_handler = new Map();
 
-    ipa_handler.set('person', buildIPAUserJsonNew);
-    ipa_handler.set('ipahost', buildIPAHostJsonNew);
-    ipa_handler.set('ipausergroup', buildIPAUserGroupJsonNew);
-    ipa_handler.set('ipahostgroup', buildIPAHostGroupJsonNew);
-    ipa_handler.set('ipanisnetgroup', buildIPANetGroupJsonNew);
-    ipa_handler.set('ipasudocmd', buildIPASudoJsonNew);
-    ipa_handler.set('ipasudocmdgrp', buildIPASudoGroupJsonNew);
-    ipa_handler.set('ipasudorule', buildIPASudoRuleJsonNew);
-    ipa_handler.set('ipahbacrule', buildIPAHBACRuleJsonNew);
-    ipa_handler.set('ipahbacservice', buildIPAHBACServiceJsonNew);
-    ipa_handler.set('ipahbacservicegroup', buildIPAHBACServiceGroupJsonNew);
-    ipa_handler.set('ipapermission', buildIPAPermissionJsonNew);
-    ipa_handler.set('ipaprivilege', buildIPAPrivilegeJsonNew);
-    ipa_handler.set('iparole', buildIPARoleJsonNew);
-    ipa_handler.set('ipaservice', buildIPAServiceJsonNew);
-
-    for (let object of chunk) {
-        for (let object_class of object.Properties.objectclass) {
-            if (ipa_handler.has(object_class)) {
-                ipa_handler.get(object_class)(object, queries);
-                if (object.hasOwnProperty('Edges'))
-                    insertEdges(queries, object.Edges);
-                break;
-            }
+    for (let user of chunk) {
+        
+        if (!(queries[IPALabels.User])) {
+            queries[IPALabels.User] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
+                props: [],
+            };
         }
+
+        let properties = user.Properties;
+        let objectid = `${IPALabels.User}-${user.Properties.object_id}`;
+
+        queries[IPALabels.User].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (user.hasOwnProperty('Edges'))
+            insertEdges(queries, user.Edges);
+                
     }
+    return queries;
+}
+
+
+/**
+ *
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
+ */
+export function buildIPAHostJsonNew(chunk) {
+
+    let queries = {};
+
+    for (let host of chunk) {
+
+        if (!(queries[IPALabels.Host])) {
+            queries[IPALabels.Host] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Host),
+                props: [],
+            };
+        }
+
+        let properties = host.Properties;
+        let objectid = `${IPALabels.Host}-${host.Properties.object_id}`;
+
+        queries[IPALabels.Host].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (host.hasOwnProperty('Edges'))
+            insertEdges(queries, host.Edges);
+                
+    }
+    return queries;
+}
+
+
+/**
+ *
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
+ */
+export function buildIPAUserGroupJsonNew(chunk) {
+    let queries = {};
+
+    for (let group of chunk) 
+        buildIPAGroupJsonNew(group, queries, IPALabels.UserGroup);
+
     return queries;
 }
 
 /**
  *
- * @param {IPAUser} user
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAUserJsonNew(user, queries) {
+export function buildIPAHostGroupJsonNew(chunk) {
+    let queries = {};
 
-    if (!(queries[IPALabels.User])) {
-        queries[IPALabels.User] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.User),
-            props: [],
-        };
-    }
+    for (let group of chunk) 
+        buildIPAGroupJsonNew(group, queries, IPALabels.HostGroup);
 
-    let properties = user.Properties;
-    let objectid = `${IPALabels.User}-${user.Properties.object_id}`;
-
-    queries[IPALabels.User].props.push({
-        objectid: objectid,
-        map: properties,
-    });
-
-}
-
-
-/**
- *
- * @param {IPAHost} host
- * @param {Object} queries
- */
-export function buildIPAHostJsonNew(host, queries) {
-
-    if (!(queries[IPALabels.Host])) {
-        queries[IPALabels.Host] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Host),
-            props: [],
-        };
-    }
-
-    let properties = host.Properties;
-    let objectid = `${IPALabels.Host}-${host.Properties.object_id}`;
-
-    queries[IPALabels.Host].props.push({
-        objectid: objectid,
-        map: properties,
-    });
-
-}
-
-
-/**
- *
- * @param {IPAUserGroup} group
- * @param {Object} queries
- */
-export function buildIPAUserGroupJsonNew(group, queries) {
-    buildIPAGroupJsonNew(group, queries, IPALabels.UserGroup);
+    return queries;
 }
 
 /**
  *
- * @param {IPAHostGroup} group
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAHostGroupJsonNew(group, queries) {
-    buildIPAGroupJsonNew(group, queries, IPALabels.HostGroup);
+export function buildIPANetGroupJsonNew(chunk) {
+    let queries = {};
+
+    for (let group of chunk) 
+        buildIPAGroupJsonNew(group, queries, IPALabels.NetGroup);
+
+    return queries;
 }
 
 /**
  *
- * @param {IPANetGroup} group
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPANetGroupJsonNew(group, queries) {
-    buildIPAGroupJsonNew(group, queries, IPALabels.NetGroup);
+export function buildIPAHBACServiceGroupJsonNew(chunk) {
+    let queries = {};
+
+    for (let group of chunk) 
+        buildIPAGroupJsonNew(group, queries, IPALabels.HBACServiceGroup);
+
+    return queries;
 }
 
 /**
  *
- * @param {IPAHBACServiceGroup} group
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAHBACServiceGroupJsonNew(group, queries) {
-    buildIPAGroupJsonNew(group, queries, IPALabels.HBACServiceGroup);
-}
+export function buildIPASudoGroupJsonNew(chunk) {
+    let queries = {};
 
-/**
- *
- * @param {IPASudoGroup} group
- * @param {Object} queries
- */
-export function buildIPASudoGroupJsonNew(group, queries) {
-    buildIPAGroupJsonNew(group, queries, IPALabels.SudoGroup);
+    for (let group of chunk) 
+        buildIPAGroupJsonNew(group, queries, IPALabels.SudoGroup);
+
+    return queries;
 }
 
 /**
@@ -1087,195 +1091,275 @@ export function buildIPAGroupJsonNew(group, queries, group_type) {
         map: properties,
     });
 
-}
-
-/**
- *
- * @param {IPASudo} sudo
- * @param {Object} queries
- */
-export function buildIPASudoJsonNew(sudo, queries) {
-    if (!(queries[IPALabels.Sudo])) {
-        queries[IPALabels.Sudo] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Sudo),
-            props: [],
-        };
-    }
-
-    let properties = sudo.Properties;
-    let objectid = `${IPALabels.Sudo}-${sudo.Properties.object_id}`;
-    
-    queries[IPALabels.Sudo].props.push({
-        objectid: objectid,
-        map: properties,
-    });
+    if (group.hasOwnProperty('Edges'))
+        insertEdges(queries, group.Edges);
 
 }
 
 /**
  *
- * @param {IPASudoRule} rule
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPASudoRuleJsonNew(rule, queries) {
-
-    if (!(queries[IPALabels.SudoRule])) {
-        queries[IPALabels.SudoRule] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.SudoRule),
-            props: [],
-        };
-    }
-
-    let properties = rule.Properties;
-    let objectid = `${IPALabels.SudoRule}-${rule.Properties.object_id}`;
+export function buildIPASudoJsonNew(chunk) {
     
-    queries[IPALabels.SudoRule].props.push({
-        objectid: objectid,
-        map: properties,
-    });
+    let queries = {};
+
+    for (let sudo of chunk) {
+    
+        if (!(queries[IPALabels.Sudo])) {
+            queries[IPALabels.Sudo] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Sudo),
+                props: [],
+            };
+        }
+
+        let properties = sudo.Properties;
+        let objectid = `${IPALabels.Sudo}-${sudo.Properties.object_id}`;
+        
+        queries[IPALabels.Sudo].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (sudo.hasOwnProperty('Edges'))
+            insertEdges(queries, sudo.Edges);
+                
+    }
+    return queries;
 
 }
 
 /**
  *
- * @param {IPAHBACService} hbacservice
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAHBACServiceJsonNew(hbacservice, queries) {
-    if (!(queries[IPALabels.HBACService])) {
-        queries[IPALabels.HBACService] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACService),
-            props: [],
-        };
-    }
+export function buildIPASudoRuleJsonNew(chunk) {
 
-    let properties = hbacservice.Properties;
-    let objectid = `${IPALabels.HBACService}-${hbacservice.Properties.object_id}`;
-    
-    queries[IPALabels.HBACService].props.push({
-        objectid: objectid,
-        map: properties,
-    });
+    let queries = {};
+
+    for (let rule of chunk) {
+
+        if (!(queries[IPALabels.SudoRule])) {
+            queries[IPALabels.SudoRule] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.SudoRule),
+                props: [],
+            };
+        }
+
+        let properties = rule.Properties;
+        let objectid = `${IPALabels.SudoRule}-${rule.Properties.object_id}`;
+        
+        queries[IPALabels.SudoRule].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (rule.hasOwnProperty('Edges'))
+            insertEdges(queries, rule.Edges);
+                
+    }
+    return queries;
 }
 
 /**
  *
- * @param {IPAHBACRule} rule
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAHBACRuleJsonNew(rule, queries) {
+export function buildIPAHBACServiceJsonNew(chunk) {
+    let queries = {};
 
-    if (!(queries[IPALabels.HBACRule])) {
-        queries[IPALabels.HBACRule] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACRule),
-            props: [],
-        };
+    for (let hbacservice of chunk) {
+
+        if (!(queries[IPALabels.HBACService])) {
+            queries[IPALabels.HBACService] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACService),
+                props: [],
+            };
+        }
+
+        let properties = hbacservice.Properties;
+        let objectid = `${IPALabels.HBACService}-${hbacservice.Properties.object_id}`;
+        
+        queries[IPALabels.HBACService].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (hbacservice.hasOwnProperty('Edges'))
+            insertEdges(queries, hbacservice.Edges);
+                
     }
+    return queries;
+}
 
-    let properties = rule.Properties;
-    let objectid = `${IPALabels.HBACRule}-${rule.Properties.object_id}`;
-    
-    queries[IPALabels.HBACRule].props.push({
-        objectid: objectid,
-        map: properties,
-    });
+/**
+ *
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
+ */
+export function buildIPAHBACRuleJsonNew(chunk) {
+
+    let queries = {};
+
+    for (let rule of chunk) {
+
+        if (!(queries[IPALabels.HBACRule])) {
+            queries[IPALabels.HBACRule] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.HBACRule),
+                props: [],
+            };
+        }
+
+        let properties = rule.Properties;
+        let objectid = `${IPALabels.HBACRule}-${rule.Properties.object_id}`;
+        
+        queries[IPALabels.HBACRule].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (rule.hasOwnProperty('Edges'))
+            insertEdges(queries, rule.Edges);
+                
+    }
+    return queries;
+}
+
+/**
+ *
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
+ */
+export function buildIPARoleJsonNew(chunk) {
+
+    let queries = {};
+
+    for (let role of chunk) {
+
+        if (!(queries[IPALabels.Role])) {
+            queries[IPALabels.Role] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Role),
+                props: [],
+            };
+        }
+
+        let properties = role.Properties;
+        let objectid = `${IPALabels.Role}-${role.Properties.object_id}`;
+        
+        queries[IPALabels.Role].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (role.hasOwnProperty('Edges'))
+            insertEdges(queries, role.Edges);
+                
+    }
+    return queries;
+}
+
+/**
+ *
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
+ */
+export function buildIPAPrivilegeJsonNew(chunk) {
+
+    let queries = {};
+
+    for (let privilege of chunk) {
+
+        if (!(queries[IPALabels.Privilege])) {
+            queries[IPALabels.Privilege] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Privilege),
+                props: [],
+            };
+        }
+
+        let properties = privilege.Properties;
+        let objectid = `${IPALabels.Privilege}-${privilege.Properties.object_id}`;
+        
+        queries[IPALabels.Privilege].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (privilege.hasOwnProperty('Edges'))
+            insertEdges(queries, privilege.Edges);
+                
+    }
+    return queries;
 
 }
 
 /**
  *
- * @param {IPARole} role
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPARoleJsonNew(role, queries) {
+export function buildIPAPermissionJsonNew(chunk) {
 
-    if (!(queries[IPALabels.Role])) {
-        queries[IPALabels.Role] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Role),
-            props: [],
-        };
+    let queries = {};
+
+    for (let permission of chunk) {
+
+        if (!(queries[IPALabels.Permission])) {
+            queries[IPALabels.Permission] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Permission),
+                props: [],
+            };
+        }
+
+        let properties = permission.Properties;
+        let objectid = `${IPALabels.Permission}-${permission.Properties.object_id}`;
+        
+        queries[IPALabels.Permission].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (permission.hasOwnProperty('Edges'))
+            insertEdges(queries, permission.Edges);
+                
     }
-
-    let properties = role.Properties;
-    let objectid = `${IPALabels.Role}-${role.Properties.object_id}`;
-    
-    queries[IPALabels.Role].props.push({
-        objectid: objectid,
-        map: properties,
-    });
+    return queries;
 
 }
 
 /**
  *
- * @param {IPAPrivilege} privilege
- * @param {Object} queries
+ * @param {Array.<IPABase>} chunk
+ * @return {{}}
  */
-export function buildIPAPrivilegeJsonNew(privilege, queries) {
+export function buildIPAServiceJsonNew(chunk) {
 
-    if (!(queries[IPALabels.Privilege])) {
-        queries[IPALabels.Privilege] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Privilege),
-            props: [],
-        };
+    let queries = {};
+
+    for (let service of chunk) {
+
+        if (!(queries[IPALabels.Service])) {
+            queries[IPALabels.Service] = {
+                statement: FREEIPA_PROP_QUERY.format(IPALabels.Service),
+                props: [],
+            };
+        }
+
+        let properties = service.Properties;
+        let objectid = `${IPALabels.Service}-${service.Properties.object_id}`;
+        
+        queries[IPALabels.Service].props.push({
+            objectid: objectid,
+            map: properties,
+        });
+
+        if (service.hasOwnProperty('Edges'))
+            insertEdges(queries, service.Edges);
+                
     }
-
-    let properties = privilege.Properties;
-    let objectid = `${IPALabels.Privilege}-${privilege.Properties.object_id}`;
-    
-    queries[IPALabels.Privilege].props.push({
-        objectid: objectid,
-        map: properties,
-    });
-
-}
-
-/**
- *
- * @param {IPAPermission} permission
- * @param {Object} queries
- */
-export function buildIPAPermissionJsonNew(permission, queries) {
-
-    if (!(queries[IPALabels.Permission])) {
-        queries[IPALabels.Permission] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Permission),
-            props: [],
-        };
-    }
-
-    let properties = permission.Properties;
-    let objectid = `${IPALabels.Permission}-${permission.Properties.object_id}`;
-    
-    queries[IPALabels.Permission].props.push({
-        objectid: objectid,
-        map: properties,
-    });
-
-}
-
-/**
- *
- * @param {IPAService} service
- * @param {Object} queries
- */
-export function buildIPAServiceJsonNew(service, queries) {
-
-    if (!(queries[IPALabels.Service])) {
-        queries[IPALabels.Service] = {
-            statement: FREEIPA_PROP_QUERY.format(IPALabels.Service),
-            props: [],
-        };
-    }
-
-    let properties = service.Properties;
-    let objectid = `${IPALabels.Service}-${service.Properties.object_id}`;
-    
-    queries[IPALabels.Service].props.push({
-        objectid: objectid,
-        map: properties,
-    });
-
+    return queries;
 }
 
 const baseInsertStatement =
