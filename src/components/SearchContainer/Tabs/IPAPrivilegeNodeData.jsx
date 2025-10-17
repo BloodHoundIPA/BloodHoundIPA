@@ -72,34 +72,6 @@ const IPAPrivilegeNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectId}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Roles'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(n:IPARole )-[:IPAMemberOf]->(:IPAPrivilege {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                />
-                                <NodeCypherLink
-                                    property='Permissions'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(:IPAPrivilege {objectid: $objectid})-[:IPAMemberOf]->(n:IPAPermission)'
-                                    }
-                                    start={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -115,6 +87,44 @@ const IPAPrivilegeNodeData = () => {
                 />
 
                 <hr></hr>
+
+                <CollapsibleSection header='MEMBER'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Roles'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(n:IPARole )-[:IPAMemberOf]->(:IPAPrivilege {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Permissions'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAPrivilege {objectid: $objectid})-[:IPAMemberOf]->(n:IPAPermission)'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
 
                 {/* <Notes objectid={objectId} type={'IPAPrivilege'} />
                 <NodeGallery

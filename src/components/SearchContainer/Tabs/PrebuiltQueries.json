@@ -1156,8 +1156,30 @@
             ]
         },
         {
+            "name": "Users",
+            "category": "FreeIPA",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAUser) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Hosts",
+            "category": "FreeIPA",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAHost) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
             "name": "Services",
-            "category": "FreeIPA - Service",
+            "category": "FreeIPA",
             "queryList": [
                 {
                     "final": true,
@@ -1195,6 +1217,105 @@
                 {
                     "final": true,
                     "query": "MATCH (n:IPANetGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Services",
+            "category": "FreeIPA - HBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAHBACService) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Service Groups",
+            "category": "FreeIPA - HBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAHBACServiceGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Rules",
+            "category": "FreeIPA - HBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAHBACRule) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Commands",
+            "category": "FreeIPA - Sudo",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPASudo) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Command Groups",
+            "category": "FreeIPA - Sudo",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPASudoGroup) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Rules",
+            "category": "FreeIPA - Sudo",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPASudoRule) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Permissions",
+            "category": "FreeIPA - RBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAPermission) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Privileges",
+            "category": "FreeIPA - RBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPAPrivilege) RETURN n",
+                    "allowCollapse": true
+                }
+            ]
+        },
+        {
+            "name": "Roles",
+            "category": "FreeIPA - RBAC",
+            "queryList": [
+                {
+                    "final": true,
+                    "query": "MATCH (n:IPARole) RETURN n",
                     "allowCollapse": true
                 }
             ]

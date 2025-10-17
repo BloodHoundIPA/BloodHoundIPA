@@ -105,10 +105,10 @@ const IPASudoNodeData = () => {
                                     property='Allow Sudo Rules'
                                     target={objectId}
                                     countQuery={
-                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..10]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
                                     }
                                     graphQuery={
-                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) RETURN p1,p2'
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: true}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..10]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: true}]->(n1:IPASudoRule) RETURN p1,p2'
                                     }
                                     start={label}
                                 />
@@ -116,10 +116,10 @@ const IPASudoNodeData = () => {
                                     property='Deny Sudo Rules'
                                     target={objectId}
                                     countQuery={
-                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..10]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) WITH collect(n) + collect(n1) AS all_nodes UNWIND all_nodes AS node RETURN COUNT(DISTINCT node)'
                                     }
                                     graphQuery={
-                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) RETURN p1,p2'
+                                        'MATCH (s:IPASudo {objectid: $objectid}) WITH s OPTIONAL MATCH p1=(s)-[r1:IPAMemberOf {allow: false}]->(n:IPASudoRule) OPTIONAL MATCH p2=(s)-[r2:IPAMemberOf*1..10]->(g2:IPASudoGroup)-[r3:IPAMemberOf {allow: false}]->(n1:IPASudoRule) RETURN p1,p2'
                                     }
                                     start={label}
                                 />
