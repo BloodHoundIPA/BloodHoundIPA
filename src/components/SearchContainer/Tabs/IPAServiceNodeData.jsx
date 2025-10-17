@@ -71,35 +71,7 @@ const IPAServiceNodeData = () => {
         >
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectId}</h5>
-
-                <CollapsibleSection header='OVERVIEW'>
-                    <div className={styles.itemlist}>
-                        <Table>
-                            <thead></thead>
-                            <tbody className='searchable'>
-                                <NodeCypherLink
-                                    property='Roles'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(:IPAService {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole)'
-                                    }
-                                    start={label}
-                                />
-                                <NodeCypherLink
-                                    property='Managed by'
-                                    target={objectId}
-                                    baseQuery={
-                                        'MATCH p=(n:IPAHost)-[:IPAManagedBy]->(:IPAService {objectid: $objectid})'
-                                    }
-                                    end={label}
-                                />
-                            </tbody>
-                        </Table>
-                    </div>
-                </CollapsibleSection>
-
-                <hr></hr>
-
+                
                 <MappedNodeProps
                     displayMap={displayMap}
                     properties={nodeProps}
@@ -115,6 +87,46 @@ const IPAServiceNodeData = () => {
                 />
 
                 <hr></hr>
+
+                <CollapsibleSection header='MEMBER OF'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Roles'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(:IPAService {objectid: $objectid})-[:IPAMemberOf]->(n:IPARole)'
+                                    }
+                                    start={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                <hr></hr>
+
+                <CollapsibleSection header='MANAGED'>
+                    <div className={styles.itemlist}>
+                        <Table>
+                            <thead></thead>
+                            <tbody className='searchable'>
+                                <NodeCypherLink
+                                    property='Managed by'
+                                    target={objectId}
+                                    baseQuery={
+                                        'MATCH p=(n:IPAHost)-[:IPAManagedBy]->(:IPAService {objectid: $objectid})'
+                                    }
+                                    end={label}
+                                />
+                            </tbody>
+                        </Table>
+                    </div>
+                </CollapsibleSection>
+
+                
 
                 {/* <Notes objectid={objectId} type={'IPAService'} />
                 <NodeGallery

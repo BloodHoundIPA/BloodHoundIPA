@@ -110,7 +110,7 @@ const IPAHBACServiceGroupNodeData = () => {
                                     property='Enabled HBAC Rules'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=true'
+                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHBACRule) WHERE n.ipaenabledflag=true'
                                     }
                                     start={label}
                                 />
@@ -118,7 +118,7 @@ const IPAHBACServiceGroupNodeData = () => {
                                     property='Disabled HBAC Rules'
                                     target={objectid}
                                     baseQuery={
-                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf*1..]->(n:IPAHBACRule) WHERE n.ipaenabledflag=false'
+                                        'MATCH p=(:IPAHBACServiceGroup {objectid: $objectid})-[:IPAMemberOf]->(n:IPAHBACRule) WHERE n.ipaenabledflag=false'
                                     }
                                     start={label}
                                 />

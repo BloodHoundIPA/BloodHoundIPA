@@ -72,7 +72,23 @@ const IPAPermissionNodeData = () => {
             <div className={clsx(styles.dl)}>
                 <h5>{label || objectId}</h5>
 
-                <CollapsibleSection header='OVERVIEW'>
+                <MappedNodeProps
+                    displayMap={displayMap}
+                    properties={nodeProps}
+                    label={label}
+                />
+
+                <hr></hr>
+
+                <ExtraNodeProps
+                    displayMap={displayMap}
+                    properties={nodeProps}
+                    label={label}
+                />
+
+                <hr></hr>
+
+                <CollapsibleSection header='MEMBER'>
                     <div className={styles.itemlist}>
                         <Table>
                             <thead></thead>
@@ -89,24 +105,6 @@ const IPAPermissionNodeData = () => {
                         </Table>
                     </div>
                 </CollapsibleSection>
-
-                <hr></hr>
-
-                <MappedNodeProps
-                    displayMap={displayMap}
-                    properties={nodeProps}
-                    label={label}
-                />
-
-                <hr></hr>
-
-                <ExtraNodeProps
-                    displayMap={displayMap}
-                    properties={nodeProps}
-                    label={label}
-                />
-
-                <hr></hr>
 
                 {/* <Notes objectid={objectId} type={'IPAPermission'} />
                 <NodeGallery
