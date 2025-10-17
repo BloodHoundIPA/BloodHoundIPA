@@ -45,6 +45,7 @@ BloodHoundIPA — это форк оригинального проекта [Blo
 
 - `IPAMemberOf`
 - `IPAMemberManager`
+- `IPAManagedBy`
 - `IPASudoRuleTo`
 - `IPAHBACRuleTo`
 

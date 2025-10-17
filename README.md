@@ -53,6 +53,7 @@ It empowers both offensive and defensive teams to gain deeper insight into ident
 
 - `IPAMemberOf`
 - `IPAMemberManager`
+- `IPAManagedBy`
 - `IPASudoRuleTo`
 - `IPAHBACRuleTo`
 
